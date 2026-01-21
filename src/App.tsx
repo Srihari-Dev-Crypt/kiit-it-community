@@ -14,6 +14,8 @@ import Communities from "./pages/Communities";
 import CreatePost from "./pages/CreatePost";
 import Notifications from "./pages/Notifications";
 import Profile from "./pages/Profile";
+import PostDetail from "./pages/PostDetail";
+import MyPosts from "./pages/MyPosts";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -36,6 +38,8 @@ const App = () => (
               <Route path="/create" element={<CreatePost />} />
               <Route path="/notifications" element={<Notifications />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/post/:id" element={<PostDetail />} />
+              <Route path="/my-posts" element={<MyPosts />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Layout>

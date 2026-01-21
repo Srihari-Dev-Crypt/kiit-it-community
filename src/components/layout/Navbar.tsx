@@ -10,7 +10,8 @@ import {
   User, 
   Menu, 
   X,
-  LogOut
+  LogOut,
+  FileText
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -83,6 +84,11 @@ export function Navbar() {
                     <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-destructive pulse-dot" />
                   </Button>
                 </Link>
+                <Link to="/my-posts">
+                  <Button variant="ghost" size="icon" title="My Posts">
+                    <FileText className="h-5 w-5" />
+                  </Button>
+                </Link>
                 <Link to="/profile">
                   <Button variant="ghost" size="icon">
                     <User className="h-5 w-5" />
@@ -150,6 +156,12 @@ export function Navbar() {
                     <Button variant="gradient" className="w-full justify-start gap-3">
                       <PenSquare className="h-5 w-5" />
                       Create Post
+                    </Button>
+                  </Link>
+                  <Link to="/my-posts" onClick={() => setMobileMenuOpen(false)}>
+                    <Button variant="ghost" className="w-full justify-start gap-3">
+                      <FileText className="h-5 w-5" />
+                      My Posts
                     </Button>
                   </Link>
                   <Button 
