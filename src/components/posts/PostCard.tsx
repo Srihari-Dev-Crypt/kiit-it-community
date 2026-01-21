@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
 import { 
@@ -12,11 +11,13 @@ import {
   HelpCircle,
   MessageSquare,
   Lightbulb,
-  Megaphone
+  Megaphone,
+  Loader2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { useVote } from "@/hooks/useVote";
 
 interface Post {
   id: string;
@@ -25,13 +26,13 @@ interface Post {
   post_type: 'confession' | 'question' | 'rant' | 'advice' | 'discussion';
   identity_type: 'anonymous' | 'pseudonymous' | 'named';
   pseudonym?: string;
-  upvotes: number;
-  downvotes: number;
-  comment_count: number;
+  upvotes: number | null;
+  downvotes: number | null;
+  comment_count: number | null;
   created_at: string;
   communities?: {
     name: string;
-    icon: string;
+    icon: string | null;
   } | null;
 }
 
@@ -48,7 +49,12 @@ const postTypeConfig = {
 };
 
 export function PostCard({ post }: PostCardProps) {
-  const [vote, setVote] = useState<1 | -1 | 0>(0);
+  const { vote, totalVotes, handleUpvote, handleDownvote, isVoting } = useVote({
+    postId: post.id,
+    initialUpvotes: post.upvotes ?? 0,
+    initialDownvotes: post.downvotes ?? 0,
+  });
+
   const typeConfig = postTypeConfig[post.post_type];
   const TypeIcon = typeConfig.icon;
 
@@ -57,8 +63,6 @@ export function PostCard({ post }: PostCardProps) {
     : post.identity_type === 'pseudonymous' 
       ? post.pseudonym || 'Anonymous'
       : 'User';
-
-  const totalVotes = post.upvotes - post.downvotes + vote;
 
   return (
     <article className="group p-4 md:p-6 rounded-xl glass border border-border/50 hover:border-primary/30 transition-all duration-300">
@@ -72,9 +76,14 @@ export function PostCard({ post }: PostCardProps) {
               "h-8 w-8",
               vote === 1 && "text-primary bg-primary/20"
             )}
-            onClick={() => setVote(vote === 1 ? 0 : 1)}
+            onClick={handleUpvote}
+            disabled={isVoting}
           >
-            <ArrowUp className="h-5 w-5" />
+            {isVoting ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <ArrowUp className="h-5 w-5" />
+            )}
           </Button>
           <span className={cn(
             "text-sm font-semibold",
@@ -90,7 +99,8 @@ export function PostCard({ post }: PostCardProps) {
               "h-8 w-8",
               vote === -1 && "text-destructive bg-destructive/20"
             )}
-            onClick={() => setVote(vote === -1 ? 0 : -1)}
+            onClick={handleDownvote}
+            disabled={isVoting}
           >
             <ArrowDown className="h-5 w-5" />
           </Button>
@@ -136,12 +146,11 @@ export function PostCard({ post }: PostCardProps) {
             {post.content}
           </p>
 
-          {/* Footer Actions */}
           <div className="flex items-center gap-4">
             <Link to={`/post/${post.id}`}>
               <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground">
                 <MessageCircle className="h-4 w-4" />
-                {post.comment_count} Comments
+                {post.comment_count ?? 0} Comments
               </Button>
             </Link>
             <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground">
