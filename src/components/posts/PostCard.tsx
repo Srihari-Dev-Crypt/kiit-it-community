@@ -65,7 +65,7 @@ export function PostCard({ post }: PostCardProps) {
       : 'User';
 
   return (
-    <article className="group p-4 md:p-6 rounded-xl glass border border-border/50 hover:border-primary/30 transition-all duration-300">
+    <article className="group p-4 md:p-6 rounded-xl glass border border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-1">
       <div className="flex gap-4">
         {/* Vote Section */}
         <div className="flex flex-col items-center gap-1">
@@ -73,8 +73,8 @@ export function PostCard({ post }: PostCardProps) {
             variant="ghost"
             size="icon"
             className={cn(
-              "h-8 w-8",
-              vote === 1 && "text-primary bg-primary/20"
+              "h-8 w-8 transition-all duration-300 hover:scale-110",
+              vote === 1 && "text-primary bg-primary/20 shadow-lg shadow-primary/20"
             )}
             onClick={handleUpvote}
             disabled={isVoting}
@@ -82,13 +82,13 @@ export function PostCard({ post }: PostCardProps) {
             {isVoting ? (
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
-              <ArrowUp className="h-5 w-5" />
+              <ArrowUp className={cn("h-5 w-5 transition-transform", vote === 1 && "animate-bounce-in")} />
             )}
           </Button>
           <span className={cn(
-            "text-sm font-semibold",
-            totalVotes > 0 && "text-primary",
-            totalVotes < 0 && "text-destructive"
+            "text-sm font-semibold transition-all duration-300",
+            totalVotes > 0 && "text-primary scale-110",
+            totalVotes < 0 && "text-destructive scale-110"
           )}>
             {totalVotes}
           </span>
@@ -96,13 +96,13 @@ export function PostCard({ post }: PostCardProps) {
             variant="ghost"
             size="icon"
             className={cn(
-              "h-8 w-8",
-              vote === -1 && "text-destructive bg-destructive/20"
+              "h-8 w-8 transition-all duration-300 hover:scale-110",
+              vote === -1 && "text-destructive bg-destructive/20 shadow-lg shadow-destructive/20"
             )}
             onClick={handleDownvote}
             disabled={isVoting}
           >
-            <ArrowDown className="h-5 w-5" />
+            <ArrowDown className={cn("h-5 w-5 transition-transform", vote === -1 && "animate-bounce-in")} />
           </Button>
         </div>
 
@@ -110,12 +110,12 @@ export function PostCard({ post }: PostCardProps) {
         <div className="flex-1 min-w-0">
           {/* Header */}
           <div className="flex flex-wrap items-center gap-2 mb-2 text-sm">
-            <Badge variant="outline" className={cn("gap-1 border-0", typeConfig.color)}>
+            <Badge variant="outline" className={cn("gap-1 border-0 transition-transform hover:scale-105", typeConfig.color)}>
               <TypeIcon className="h-3 w-3" />
               {typeConfig.label}
             </Badge>
             {post.communities && (
-              <span className="text-muted-foreground">
+              <span className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
                 {post.communities.icon} {post.communities.name}
               </span>
             )}
@@ -136,28 +136,28 @@ export function PostCard({ post }: PostCardProps) {
 
           {/* Title */}
           <Link to={`/post/${post.id}`}>
-            <h3 className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors line-clamp-2">
+            <h3 className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors line-clamp-2 hover:underline decoration-primary/50 underline-offset-4">
               {post.title}
             </h3>
           </Link>
 
           {/* Content Preview */}
-          <p className="text-muted-foreground text-sm line-clamp-3 mb-4">
+          <p className="text-muted-foreground text-sm line-clamp-3 mb-4 group-hover:text-muted-foreground/80 transition-colors">
             {post.content}
           </p>
 
           <div className="flex items-center gap-4">
             <Link to={`/post/${post.id}`}>
-              <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground">
-                <MessageCircle className="h-4 w-4" />
+              <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground hover:bg-muted transition-all group/btn">
+                <MessageCircle className="h-4 w-4 group-hover/btn:scale-110 transition-transform" />
                 {post.comment_count ?? 0} Comments
               </Button>
             </Link>
-            <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground">
-              <Share2 className="h-4 w-4" />
+            <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground hover:bg-muted transition-all group/btn">
+              <Share2 className="h-4 w-4 group-hover/btn:scale-110 group-hover/btn:rotate-12 transition-transform" />
               Share
             </Button>
-            <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground ml-auto">
+            <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground ml-auto hover:rotate-90 transition-transform duration-300">
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </div>

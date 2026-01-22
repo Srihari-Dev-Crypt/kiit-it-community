@@ -9,9 +9,9 @@ import {
   PenSquare, 
   TrendingUp, 
   Clock, 
-  CheckCircle,
   Filter,
-  HelpCircle
+  HelpCircle,
+  MessageCircle
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -48,7 +48,7 @@ export default function Questions() {
 
   const sortOptions: { value: SortOption; label: string; icon: typeof Clock }[] = [
     { value: 'new', label: 'Newest', icon: Clock },
-    { value: 'unanswered', label: 'Unanswered', icon: HelpCircle },
+    { value: 'unanswered', label: 'Unanswered', icon: MessageCircle },
     { value: 'top', label: 'Top', icon: TrendingUp },
   ];
 
@@ -56,18 +56,21 @@ export default function Questions() {
     <div className="container mx-auto px-4 py-8">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-        <div>
-          <h1 className="text-3xl font-bold mb-2">
-            <span className="gradient-text-primary">Student Q&A</span>
-          </h1>
+        <div className="animate-fade-in-left">
+          <div className="flex items-center gap-3 mb-2">
+            <h1 className="text-3xl font-bold">
+              <span className="gradient-text-primary">Student Q&A</span>
+            </h1>
+            <HelpCircle className="h-6 w-6 text-accent animate-pulse-scale" />
+          </div>
           <p className="text-muted-foreground">
             Ask questions, get answers from fellow students
           </p>
         </div>
         {user && (
-          <Link to="/create?type=question">
-            <Button variant="gradient" className="gap-2">
-              <PenSquare className="h-4 w-4" />
+          <Link to="/create?type=question" className="animate-fade-in-right">
+            <Button variant="gradient" className="gap-2 group shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-shadow">
+              <PenSquare className="h-4 w-4 group-hover:rotate-12 transition-transform" />
               Ask a Question
             </Button>
           </Link>
@@ -75,9 +78,9 @@ export default function Questions() {
       </div>
 
       {/* Sort Options */}
-      <div className="flex items-center gap-2 mb-6 overflow-x-auto pb-2">
+      <div className="flex items-center gap-2 mb-6 overflow-x-auto pb-2 animate-fade-in">
         <Filter className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-        {sortOptions.map((option) => {
+        {sortOptions.map((option, index) => {
           const Icon = option.icon;
           return (
             <Button
@@ -85,9 +88,10 @@ export default function Questions() {
               variant={sortBy === option.value ? "secondary" : "ghost"}
               size="sm"
               onClick={() => setSortBy(option.value)}
-              className="gap-2"
+              className={`gap-2 transition-all duration-300 ${sortBy === option.value ? 'scale-105 shadow-md' : 'hover:scale-105'}`}
+              style={{ animationDelay: `${index * 50}ms` }}
             >
-              <Icon className="h-4 w-4" />
+              <Icon className={`h-4 w-4 ${sortBy === option.value ? 'animate-pulse-scale' : ''}`} />
               {option.label}
             </Button>
           );
@@ -98,7 +102,11 @@ export default function Questions() {
       <div className="space-y-4">
         {isLoading ? (
           Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="p-6 rounded-xl glass border border-border/50">
+            <div 
+              key={i} 
+              className="p-6 rounded-xl glass border border-border/50 animate-pulse"
+              style={{ animationDelay: `${i * 100}ms` }}
+            >
               <div className="flex gap-4">
                 <div className="flex flex-col items-center gap-2">
                   <Skeleton className="h-8 w-8 rounded" />
@@ -115,20 +123,26 @@ export default function Questions() {
             </div>
           ))
         ) : posts && posts.length > 0 ? (
-          posts.map((post) => (
-            <PostCard key={post.id} post={post} />
+          posts.map((post, index) => (
+            <div 
+              key={post.id}
+              className="animate-fade-in-up opacity-0"
+              style={{ animationDelay: `${index * 80}ms`, animationFillMode: "forwards" }}
+            >
+              <PostCard post={post} />
+            </div>
           ))
         ) : (
-          <div className="text-center py-16">
-            <div className="text-6xl mb-4">🤔</div>
+          <div className="text-center py-16 animate-bounce-in">
+            <div className="text-6xl mb-4 animate-float">🤔</div>
             <h3 className="text-xl font-semibold mb-2">No questions yet</h3>
             <p className="text-muted-foreground mb-6">
               Be the first to ask something!
             </p>
             {user ? (
               <Link to="/create?type=question">
-                <Button variant="gradient" className="gap-2">
-                  <PenSquare className="h-4 w-4" />
+                <Button variant="gradient" className="gap-2 group">
+                  <PenSquare className="h-4 w-4 group-hover:rotate-12 transition-transform" />
                   Ask a Question
                 </Button>
               </Link>
