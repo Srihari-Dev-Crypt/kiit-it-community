@@ -170,6 +170,7 @@ export type Database = {
           downvotes: number | null
           id: string
           identity_type: Database["public"]["Enums"]["identity_type"]
+          is_demo: boolean | null
           is_pinned: boolean | null
           post_type: Database["public"]["Enums"]["post_type"]
           pseudonym: string | null
@@ -186,6 +187,7 @@ export type Database = {
           downvotes?: number | null
           id?: string
           identity_type?: Database["public"]["Enums"]["identity_type"]
+          is_demo?: boolean | null
           is_pinned?: boolean | null
           post_type?: Database["public"]["Enums"]["post_type"]
           pseudonym?: string | null
@@ -202,6 +204,7 @@ export type Database = {
           downvotes?: number | null
           id?: string
           identity_type?: Database["public"]["Enums"]["identity_type"]
+          is_demo?: boolean | null
           is_pinned?: boolean | null
           post_type?: Database["public"]["Enums"]["post_type"]
           pseudonym?: string | null
