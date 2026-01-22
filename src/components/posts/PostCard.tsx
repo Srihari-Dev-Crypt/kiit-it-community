@@ -41,11 +41,11 @@ interface PostCardProps {
 }
 
 const postTypeConfig = {
-  confession: { icon: EyeOff, label: "Confession", color: "bg-purple-500/20 text-purple-400" },
+  confession: { icon: EyeOff, label: "Confession", color: "bg-primary/20 text-primary" },
   question: { icon: HelpCircle, label: "Question", color: "bg-accent/20 text-accent" },
   rant: { icon: Megaphone, label: "Rant", color: "bg-destructive/20 text-destructive" },
   advice: { icon: Lightbulb, label: "Advice", color: "bg-warning/20 text-warning" },
-  discussion: { icon: MessageSquare, label: "Discussion", color: "bg-primary/20 text-primary" },
+  discussion: { icon: MessageSquare, label: "Discussion", color: "bg-muted text-foreground" },
 };
 
 export function PostCard({ post }: PostCardProps) {
