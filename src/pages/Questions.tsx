@@ -14,6 +14,7 @@ import {
   MessageCircle
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/ui/scroll-reveal";
 
 type SortOption = 'new' | 'unanswered' | 'top';
 
@@ -56,7 +57,7 @@ export default function Questions() {
     <div className="container mx-auto px-4 py-8">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-        <div className="animate-fade-in-left">
+        <ScrollReveal direction="left" blur>
           <div className="flex items-center gap-3 mb-2">
             <h1 className="text-3xl font-bold">
               <span className="gradient-text-primary">Student Q&A</span>
@@ -66,37 +67,40 @@ export default function Questions() {
           <p className="text-muted-foreground">
             Ask questions, get answers from fellow students
           </p>
-        </div>
+        </ScrollReveal>
         {user && (
-          <Link to="/create?type=question" className="animate-fade-in-right">
-            <Button variant="gradient" className="gap-2 group shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-shadow">
-              <PenSquare className="h-4 w-4 group-hover:rotate-12 transition-transform" />
-              Ask a Question
-            </Button>
-          </Link>
+          <ScrollReveal direction="right" blur delay={0.1}>
+            <Link to="/create?type=question">
+              <Button variant="gradient" className="gap-2 group shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-shadow">
+                <PenSquare className="h-4 w-4 group-hover:rotate-12 transition-transform" />
+                Ask a Question
+              </Button>
+            </Link>
+          </ScrollReveal>
         )}
       </div>
 
       {/* Sort Options */}
-      <div className="flex items-center gap-2 mb-6 overflow-x-auto pb-2 animate-fade-in">
-        <Filter className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-        {sortOptions.map((option, index) => {
-          const Icon = option.icon;
-          return (
-            <Button
-              key={option.value}
-              variant={sortBy === option.value ? "secondary" : "ghost"}
-              size="sm"
-              onClick={() => setSortBy(option.value)}
-              className={`gap-2 transition-all duration-300 ${sortBy === option.value ? 'scale-105 shadow-md' : 'hover:scale-105'}`}
-              style={{ animationDelay: `${index * 50}ms` }}
-            >
-              <Icon className={`h-4 w-4 ${sortBy === option.value ? 'animate-pulse-scale' : ''}`} />
-              {option.label}
-            </Button>
-          );
-        })}
-      </div>
+      <ScrollReveal direction="up" blur delay={0.15}>
+        <div className="flex items-center gap-2 mb-6 overflow-x-auto pb-2">
+          <Filter className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+          {sortOptions.map((option) => {
+            const Icon = option.icon;
+            return (
+              <Button
+                key={option.value}
+                variant={sortBy === option.value ? "secondary" : "ghost"}
+                size="sm"
+                onClick={() => setSortBy(option.value)}
+                className={`gap-2 transition-all duration-300 ${sortBy === option.value ? 'scale-105 shadow-md' : 'hover:scale-105'}`}
+              >
+                <Icon className={`h-4 w-4 ${sortBy === option.value ? 'animate-pulse-scale' : ''}`} />
+                {option.label}
+              </Button>
+            );
+          })}
+        </div>
+      </ScrollReveal>
 
       {/* Posts List */}
       <div className="space-y-4">
@@ -123,37 +127,37 @@ export default function Questions() {
             </div>
           ))
         ) : posts && posts.length > 0 ? (
-          posts.map((post, index) => (
-            <div 
-              key={post.id}
-              className="animate-fade-in-up opacity-0"
-              style={{ animationDelay: `${index * 80}ms`, animationFillMode: "forwards" }}
-            >
-              <PostCard post={post} />
-            </div>
-          ))
+          <StaggerContainer className="space-y-4" staggerDelay={0.08}>
+            {posts.map((post) => (
+              <StaggerItem key={post.id} blur>
+                <PostCard post={post} />
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
         ) : (
-          <div className="text-center py-16 animate-bounce-in">
-            <div className="text-6xl mb-4 animate-float">🤔</div>
-            <h3 className="text-xl font-semibold mb-2">No questions yet</h3>
-            <p className="text-muted-foreground mb-6">
-              Be the first to ask something!
-            </p>
-            {user ? (
-              <Link to="/create?type=question">
-                <Button variant="gradient" className="gap-2 group">
-                  <PenSquare className="h-4 w-4 group-hover:rotate-12 transition-transform" />
-                  Ask a Question
-                </Button>
-              </Link>
-            ) : (
-              <Link to="/signup">
-                <Button variant="gradient">
-                  Sign up to ask
-                </Button>
-              </Link>
-            )}
-          </div>
+          <ScrollReveal direction="up" blur scale>
+            <div className="text-center py-16">
+              <div className="text-6xl mb-4 animate-float">🤔</div>
+              <h3 className="text-xl font-semibold mb-2">No questions yet</h3>
+              <p className="text-muted-foreground mb-6">
+                Be the first to ask something!
+              </p>
+              {user ? (
+                <Link to="/create?type=question">
+                  <Button variant="gradient" className="gap-2 group">
+                    <PenSquare className="h-4 w-4 group-hover:rotate-12 transition-transform" />
+                    Ask a Question
+                  </Button>
+                </Link>
+              ) : (
+                <Link to="/signup">
+                  <Button variant="gradient">
+                    Sign up to ask
+                  </Button>
+                </Link>
+              )}
+            </div>
+          </ScrollReveal>
         )}
       </div>
     </div>
