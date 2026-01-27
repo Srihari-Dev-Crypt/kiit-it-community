@@ -67,11 +67,23 @@ export default function Index() {
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative py-20 md:py-32 overflow-hidden">
-        {/* Animated background elements */}
+        {/* Gradient Mesh Background */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-pulse-scale" />
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-pulse-scale" style={{ animationDelay: "1s" }} />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-3xl animate-spin-slow" />
+          {/* Primary large orbs */}
+          <div className="absolute -top-40 -left-40 w-[500px] h-[500px] bg-gradient-to-br from-primary/30 to-transparent rounded-full blur-3xl animate-float" />
+          <div className="absolute -bottom-20 -right-20 w-[600px] h-[600px] bg-gradient-to-tl from-accent/25 to-transparent rounded-full blur-3xl animate-float" style={{ animationDelay: "-3s" }} />
+          
+          {/* Secondary mid-size orbs */}
+          <div className="absolute top-1/4 right-1/4 w-[400px] h-[400px] bg-gradient-to-bl from-primary/20 via-accent/10 to-transparent rounded-full blur-3xl animate-float" style={{ animationDelay: "-1.5s" }} />
+          <div className="absolute bottom-1/3 left-1/4 w-[350px] h-[350px] bg-gradient-to-tr from-accent/20 via-primary/15 to-transparent rounded-full blur-3xl animate-float" style={{ animationDelay: "-4s" }} />
+          
+          {/* Tertiary accent orbs */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-gradient-radial from-primary/10 via-accent/5 to-transparent rounded-full blur-3xl animate-spin-slow" />
+          <div className="absolute top-20 right-20 w-[250px] h-[250px] bg-gradient-to-b from-accent/25 to-primary/10 rounded-full blur-2xl animate-float" style={{ animationDelay: "-2s" }} />
+          <div className="absolute bottom-40 left-20 w-[200px] h-[200px] bg-gradient-to-t from-primary/30 to-accent/15 rounded-full blur-2xl animate-float" style={{ animationDelay: "-5s" }} />
+          
+          {/* Mesh grid overlay */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,transparent_0%,hsl(var(--background))_70%)]" />
         </div>
 
         <div className="container mx-auto px-4 text-center relative z-10">
