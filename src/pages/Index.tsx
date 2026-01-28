@@ -15,6 +15,7 @@ import { PostCard } from "@/components/posts/PostCard";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/ui/scroll-reveal";
+import { FloatingParticles } from "@/components/ui/floating-particles";
 
 const features = [
   {
@@ -81,6 +82,9 @@ export default function Index() {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-gradient-radial from-primary/10 via-accent/5 to-transparent rounded-full blur-3xl animate-spin-slow" />
           <div className="absolute top-20 right-20 w-[250px] h-[250px] bg-gradient-to-b from-accent/25 to-primary/10 rounded-full blur-2xl animate-float" style={{ animationDelay: "-2s" }} />
           <div className="absolute bottom-40 left-20 w-[200px] h-[200px] bg-gradient-to-t from-primary/30 to-accent/15 rounded-full blur-2xl animate-float" style={{ animationDelay: "-5s" }} />
+          
+          {/* Floating particles */}
+          <FloatingParticles count={40} />
           
           {/* Mesh grid overlay */}
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,transparent_0%,hsl(var(--background))_70%)]" />
