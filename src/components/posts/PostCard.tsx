@@ -4,7 +4,6 @@ import {
   ArrowUp, 
   ArrowDown, 
   MessageCircle, 
-  Share2, 
   MoreHorizontal,
   Eye,
   EyeOff,
@@ -13,14 +12,12 @@ import {
   Lightbulb,
   Megaphone,
   Loader2,
-  Check
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { useVote } from "@/hooks/useVote";
-import { useToast } from "@/hooks/use-toast";
-import { useState } from "react";
+import { ShareMenu } from "./ShareMenu";
 
 interface Post {
   id: string;
@@ -57,8 +54,6 @@ export function PostCard({ post }: PostCardProps) {
     initialUpvotes: post.upvotes ?? 0,
     initialDownvotes: post.downvotes ?? 0,
   });
-  const { toast } = useToast();
-  const [copied, setCopied] = useState(false);
 
   const typeConfig = postTypeConfig[post.post_type];
   const TypeIcon = typeConfig.icon;
@@ -68,18 +63,6 @@ export function PostCard({ post }: PostCardProps) {
     : post.identity_type === 'pseudonymous' 
       ? post.pseudonym || 'Anonymous'
       : 'User';
-
-  const handleShare = async () => {
-    const postUrl = `${window.location.origin}/post/${post.id}`;
-    try {
-      await navigator.clipboard.writeText(postUrl);
-      setCopied(true);
-      toast({ title: "Link copied!", description: "Post link copied to clipboard" });
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      toast({ variant: "destructive", title: "Failed to copy", description: "Could not copy link to clipboard" });
-    }
-  };
 
   return (
     <article className="group p-4 md:p-6 rounded-xl glass border border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-1">
@@ -170,19 +153,7 @@ export function PostCard({ post }: PostCardProps) {
                 {post.comment_count ?? 0} Comments
               </Button>
             </Link>
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className="gap-2 text-muted-foreground hover:text-foreground hover:bg-muted transition-all group/btn"
-              onClick={handleShare}
-            >
-              {copied ? (
-                <Check className="h-4 w-4 text-primary" />
-              ) : (
-                <Share2 className="h-4 w-4 group-hover/btn:scale-110 group-hover/btn:rotate-12 transition-transform" />
-              )}
-              {copied ? "Copied!" : "Share"}
-            </Button>
+            <ShareMenu postId={post.id} title={post.title} />
             <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground ml-auto hover:rotate-90 transition-transform duration-300">
               <MoreHorizontal className="h-4 w-4" />
             </Button>
