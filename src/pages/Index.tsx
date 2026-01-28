@@ -84,7 +84,7 @@ export default function Index() {
           <div className="absolute bottom-40 left-20 w-[200px] h-[200px] bg-gradient-to-t from-primary/30 to-accent/15 rounded-full blur-2xl animate-float" style={{ animationDelay: "-5s" }} />
           
           {/* Floating particles */}
-          <FloatingParticles count={40} />
+          <FloatingParticles count={20} />
           
           {/* Mesh grid overlay */}
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,transparent_0%,hsl(var(--background))_70%)]" />
