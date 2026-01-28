@@ -16,13 +16,13 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { CommentCard } from "@/components/comments/CommentCard";
+import { ShareMenu } from "@/components/posts/ShareMenu";
 import { cn } from "@/lib/utils";
 import {
   ArrowUp,
   ArrowDown,
   ArrowLeft,
   MessageCircle,
-  Share2,
   Eye,
   EyeOff,
   HelpCircle,
@@ -31,7 +31,6 @@ import {
   Megaphone,
   Loader2,
   Send,
-  Check,
 } from "lucide-react";
 
 const commentSchema = z.object({
@@ -54,19 +53,6 @@ export default function PostDetail() {
   const { user } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const [copied, setCopied] = useState(false);
-
-  const handleShare = async () => {
-    const postUrl = window.location.href;
-    try {
-      await navigator.clipboard.writeText(postUrl);
-      setCopied(true);
-      toast({ title: "Link copied!", description: "Post link copied to clipboard" });
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      toast({ variant: "destructive", title: "Failed to copy", description: "Could not copy link to clipboard" });
-    }
-  };
 
   const { register, handleSubmit, reset, watch, setValue, formState: { errors } } = useForm<CommentForm>({
     resolver: zodResolver(commentSchema),
@@ -253,15 +239,7 @@ export default function PostDetail() {
                 <MessageCircle className="h-4 w-4" />
                 {post.comment_count ?? 0} Comments
               </span>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className="gap-2 text-muted-foreground hover:text-foreground"
-                onClick={handleShare}
-              >
-                {copied ? <Check className="h-4 w-4 text-primary" /> : <Share2 className="h-4 w-4" />}
-                {copied ? "Copied!" : "Share"}
-              </Button>
+              <ShareMenu postId={post.id} title={post.title} />
             </div>
           </div>
         </div>
