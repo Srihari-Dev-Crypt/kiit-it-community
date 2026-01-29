@@ -25,8 +25,9 @@ export default function Confessions() {
   const { data: posts, isLoading } = useQuery({
     queryKey: ["confessions", sortBy],
     queryFn: async () => {
+      // Use posts_public view to protect anonymous user identities
       let query = supabase
-        .from("posts")
+        .from("posts_public")
         .select(`
           *,
           communities (name, icon)

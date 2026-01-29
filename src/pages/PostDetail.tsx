@@ -61,12 +61,12 @@ export default function PostDetail() {
 
   const isAnonymous = watch("is_anonymous");
 
-  // Fetch post
+  // Fetch post using posts_public view to protect anonymous user identities
   const { data: post, isLoading: postLoading } = useQuery({
     queryKey: ["post", id],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("posts")
+        .from("posts_public")
         .select("*, communities (name, icon)")
         .eq("id", id)
         .single();
