@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -19,7 +19,11 @@ type LoginForm = z.infer<typeof loginSchema>;
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { signIn } = useAuth();
+
+  // Get the intended destination from state, default to home
+  const from = (location.state as { from?: { pathname: string } })?.from?.pathname || "/";
 
   const {
     register,
@@ -35,7 +39,7 @@ export default function Login() {
     setIsLoading(false);
     
     if (!error) {
-      navigate("/");
+      navigate(from, { replace: true });
     }
   };
 
