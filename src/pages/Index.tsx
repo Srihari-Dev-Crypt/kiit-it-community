@@ -50,8 +50,9 @@ export default function Index() {
   const { data: recentPosts } = useQuery({
     queryKey: ["recent-posts"],
     queryFn: async () => {
+      // Use posts_public view to protect anonymous user identities
       const { data, error } = await supabase
-        .from("posts")
+        .from("posts_public")
         .select(`
           *,
           communities (name, icon)

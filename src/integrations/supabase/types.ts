@@ -72,6 +72,13 @@ export type Database = {
             referencedRelation: "posts"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       communities: {
@@ -157,6 +164,13 @@ export type Database = {
             columns: ["related_post_id"]
             isOneToOne: false
             referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notifications_related_post_id_fkey"
+            columns: ["related_post_id"]
+            isOneToOne: false
+            referencedRelation: "posts_public"
             referencedColumns: ["id"]
           },
         ]
@@ -305,6 +319,13 @@ export type Database = {
             referencedRelation: "posts"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "reports_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       user_roles: {
@@ -368,11 +389,79 @@ export type Database = {
             referencedRelation: "posts"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "votes_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
     }
     Views: {
-      [_ in never]: never
+      posts_public: {
+        Row: {
+          comment_count: number | null
+          community_id: string | null
+          content: string | null
+          created_at: string | null
+          downvotes: number | null
+          id: string | null
+          identity_type: Database["public"]["Enums"]["identity_type"] | null
+          is_demo: boolean | null
+          is_pinned: boolean | null
+          post_type: Database["public"]["Enums"]["post_type"] | null
+          pseudonym: string | null
+          title: string | null
+          updated_at: string | null
+          upvotes: number | null
+          user_id: string | null
+        }
+        Insert: {
+          comment_count?: number | null
+          community_id?: string | null
+          content?: string | null
+          created_at?: string | null
+          downvotes?: number | null
+          id?: string | null
+          identity_type?: Database["public"]["Enums"]["identity_type"] | null
+          is_demo?: boolean | null
+          is_pinned?: boolean | null
+          post_type?: Database["public"]["Enums"]["post_type"] | null
+          pseudonym?: string | null
+          title?: string | null
+          updated_at?: string | null
+          upvotes?: number | null
+          user_id?: never
+        }
+        Update: {
+          comment_count?: number | null
+          community_id?: string | null
+          content?: string | null
+          created_at?: string | null
+          downvotes?: number | null
+          id?: string | null
+          identity_type?: Database["public"]["Enums"]["identity_type"] | null
+          is_demo?: boolean | null
+          is_pinned?: boolean | null
+          post_type?: Database["public"]["Enums"]["post_type"] | null
+          pseudonym?: string | null
+          title?: string | null
+          updated_at?: string | null
+          upvotes?: number | null
+          user_id?: never
+        }
+        Relationships: [
+          {
+            foreignKeyName: "posts_community_id_fkey"
+            columns: ["community_id"]
+            isOneToOne: false
+            referencedRelation: "communities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       has_role: {
