@@ -1,6 +1,7 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { PageTransition } from "./PageTransition";
+import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import Index from "@/pages/Index";
 import Login from "@/pages/Login";
 import Signup from "@/pages/Signup";
@@ -23,14 +24,14 @@ export function AnimatedRoutes() {
         <Route path="/" element={<PageTransition><Index /></PageTransition>} />
         <Route path="/login" element={<PageTransition><Login /></PageTransition>} />
         <Route path="/signup" element={<PageTransition><Signup /></PageTransition>} />
-        <Route path="/confessions" element={<PageTransition><Confessions /></PageTransition>} />
-        <Route path="/questions" element={<PageTransition><Questions /></PageTransition>} />
-        <Route path="/communities" element={<PageTransition><Communities /></PageTransition>} />
-        <Route path="/create" element={<PageTransition><CreatePost /></PageTransition>} />
-        <Route path="/notifications" element={<PageTransition><Notifications /></PageTransition>} />
-        <Route path="/profile" element={<PageTransition><Profile /></PageTransition>} />
-        <Route path="/post/:id" element={<PageTransition><PostDetail /></PageTransition>} />
-        <Route path="/my-posts" element={<PageTransition><MyPosts /></PageTransition>} />
+        <Route path="/confessions" element={<PageTransition><ProtectedRoute><Confessions /></ProtectedRoute></PageTransition>} />
+        <Route path="/questions" element={<PageTransition><ProtectedRoute><Questions /></ProtectedRoute></PageTransition>} />
+        <Route path="/communities" element={<PageTransition><ProtectedRoute><Communities /></ProtectedRoute></PageTransition>} />
+        <Route path="/create" element={<PageTransition><ProtectedRoute><CreatePost /></ProtectedRoute></PageTransition>} />
+        <Route path="/notifications" element={<PageTransition><ProtectedRoute><Notifications /></ProtectedRoute></PageTransition>} />
+        <Route path="/profile" element={<PageTransition><ProtectedRoute><Profile /></ProtectedRoute></PageTransition>} />
+        <Route path="/post/:id" element={<PageTransition><ProtectedRoute><PostDetail /></ProtectedRoute></PageTransition>} />
+        <Route path="/my-posts" element={<PageTransition><ProtectedRoute><MyPosts /></ProtectedRoute></PageTransition>} />
         <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
       </Routes>
     </AnimatePresence>
