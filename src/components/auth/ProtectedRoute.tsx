@@ -1,7 +1,7 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import { Flame } from "lucide-react";
 import { motion } from "framer-motion";
+import logoImage from "@/assets/logo.png";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -21,10 +21,9 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
           transition={{ duration: 0.4, ease: "easeOut" }}
         >
           <motion.div
-            className="relative h-16 w-16 rounded-2xl gradient-primary flex items-center justify-center shadow-lg glow-primary"
+            className="relative"
             animate={{
               scale: [1, 1.1, 1],
-              rotate: [0, 5, -5, 0],
             }}
             transition={{
               duration: 2,
@@ -32,9 +31,10 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
               ease: "easeInOut",
             }}
           >
-            <Flame className="h-8 w-8 text-primary-foreground" />
+            <img src={logoImage} alt="KIIT IT Logo" className="h-16 object-contain" />
             <motion.div
-              className="absolute inset-0 rounded-2xl bg-primary/30 blur-xl"
+              className="absolute inset-0 blur-xl opacity-50"
+              style={{ backgroundImage: `url(${logoImage})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center' }}
               animate={{ opacity: [0.3, 0.7, 0.3] }}
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             />

@@ -11,9 +11,9 @@ import {
   Menu, 
   X,
   LogOut,
-  FileText,
-  Flame
+  FileText
 } from "lucide-react";
+import logoImage from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
@@ -41,15 +41,8 @@ export function Navbar() {
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 group">
-            <div className="relative h-10 w-10 rounded-xl gradient-primary flex items-center justify-center shadow-lg group-hover:shadow-primary/30 transition-all duration-300">
-              <Flame className="h-5 w-5 text-primary-foreground" />
-              <div className="absolute inset-0 rounded-xl bg-primary/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-            </div>
-            <div className="hidden sm:flex flex-col">
-              <span className="text-xl font-bold gradient-text-primary tracking-tight">KIIT IT</span>
-              <span className="text-[10px] text-muted-foreground -mt-1 tracking-widest uppercase">Community</span>
-            </div>
+          <Link to="/" className="flex items-center gap-2 group">
+            <img src={logoImage} alt="KIIT IT Logo" className="h-10 object-contain" />
           </Link>
 
           {/* Desktop Navigation */}
