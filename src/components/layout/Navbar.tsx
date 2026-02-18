@@ -42,7 +42,7 @@ export function Navbar() {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group">
-            <img src={logoImage} alt="KIIT IT Logo" className="h-14 object-contain transition-all duration-300 group-hover:drop-shadow-[0_0_12px_hsl(var(--primary)/0.6)]" />
+            <img src={logoImage} alt="KIIT IT Logo" className="h-28 -my-6 object-contain transition-all duration-300 group-hover:drop-shadow-[0_0_12px_hsl(var(--primary)/0.6)]" />
           </Link>
 
           {/* Desktop Navigation */}
