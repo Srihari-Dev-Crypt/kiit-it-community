@@ -13,6 +13,7 @@ import Notifications from "@/pages/Notifications";
 import Profile from "@/pages/Profile";
 import PostDetail from "@/pages/PostDetail";
 import MyPosts from "@/pages/MyPosts";
+import AIChatbot from "@/pages/AIChatbot";
 import NotFound from "@/pages/NotFound";
 
 export function AnimatedRoutes() {
@@ -32,6 +33,7 @@ export function AnimatedRoutes() {
         <Route path="/profile" element={<PageTransition><ProtectedRoute><Profile /></ProtectedRoute></PageTransition>} />
         <Route path="/post/:id" element={<PageTransition><ProtectedRoute><PostDetail /></ProtectedRoute></PageTransition>} />
         <Route path="/my-posts" element={<PageTransition><ProtectedRoute><MyPosts /></ProtectedRoute></PageTransition>} />
+        <Route path="/ai-chat" element={<PageTransition><ProtectedRoute><AIChatbot /></ProtectedRoute></PageTransition>} />
         <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
       </Routes>
     </AnimatePresence>

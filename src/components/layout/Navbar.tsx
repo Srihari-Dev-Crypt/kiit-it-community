@@ -11,7 +11,8 @@ import {
   Menu, 
   X,
   LogOut,
-  FileText
+  FileText,
+  Bot
 } from "lucide-react";
 import logoImage from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
@@ -83,6 +84,11 @@ export function Navbar() {
                   <Button variant="ghost" size="icon" className="relative hover:bg-muted rounded-full">
                     <Bell className="h-5 w-5" />
                     <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-primary pulse-dot shadow-lg shadow-primary/50" />
+                  </Button>
+                </Link>
+                <Link to="/ai-chat">
+                  <Button variant="ghost" size="icon" title="AI Chat" className="hover:bg-muted rounded-full">
+                    <Bot className="h-5 w-5" />
                   </Button>
                 </Link>
                 <Link to="/my-posts">
@@ -157,6 +163,12 @@ export function Navbar() {
                     <Button variant="gradient" className="w-full justify-start gap-3 rounded-xl">
                       <PenSquare className="h-5 w-5" />
                       Create Post
+                    </Button>
+                  </Link>
+                  <Link to="/ai-chat" onClick={() => setMobileMenuOpen(false)}>
+                    <Button variant="ghost" className="w-full justify-start gap-3 rounded-xl">
+                      <Bot className="h-5 w-5" />
+                      AI Chat
                     </Button>
                   </Link>
                   <Link to="/my-posts" onClick={() => setMobileMenuOpen(false)}>
