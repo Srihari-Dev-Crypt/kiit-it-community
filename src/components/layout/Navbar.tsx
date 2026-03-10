@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { 
-  Home, 
-  MessageSquare, 
-  HelpCircle, 
-  Users, 
-  PenSquare, 
-  Bell, 
-  User, 
-  Menu, 
+import {
+  Home,
+  MessageSquare,
+  HelpCircle,
+  Users,
+  PenSquare,
+  Bell,
+  User,
+  Menu,
   X,
   LogOut,
   FileText,
@@ -38,16 +38,16 @@ export function Navbar() {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/95 backdrop-blur-xl">
+    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border/40 bg-background/90 backdrop-blur-xl">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group">
-            <img src={logoImage} alt="KIIT IT Logo" className="h-14 -my-1 object-contain transition-all duration-300 group-hover:drop-shadow-[0_0_12px_hsl(var(--primary)/0.6)]" />
+            <img src={logoImage} alt="KIIT IT Logo" className="h-12 -my-1 object-contain transition-all duration-300 group-hover:drop-shadow-[0_0_12px_hsl(265_80%_58%/0.5)]" />
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-1 bg-muted/30 rounded-full px-2 py-1.5">
+          <div className="hidden md:flex items-center gap-1 bg-muted/40 rounded-full px-1.5 py-1">
             {navItems.map((item) => {
               const isActive = location.pathname === item.path;
               return (
@@ -56,10 +56,10 @@ export function Navbar() {
                     variant="ghost"
                     size="sm"
                     className={cn(
-                      "gap-2 rounded-full transition-all duration-300",
-                      isActive 
-                        ? "bg-primary text-primary-foreground shadow-lg shadow-primary/30" 
-                        : "hover:bg-muted"
+                      "gap-2 rounded-full transition-all duration-200 text-sm font-medium",
+                      isActive
+                        ? "bg-primary text-primary-foreground shadow-md shadow-primary/25"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
                     )}
                   >
                     <item.icon className="h-4 w-4" />
@@ -71,121 +71,91 @@ export function Navbar() {
           </div>
 
           {/* Right Actions */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             {user ? (
               <>
                 <Link to="/create">
-                  <Button variant="gradient" size="sm" className="hidden sm:flex gap-2 shadow-lg shadow-primary/20">
+                  <Button variant="gradient" size="sm" className="hidden sm:flex gap-2 rounded-full shadow-md shadow-primary/20">
                     <PenSquare className="h-4 w-4" />
                     Create
                   </Button>
                 </Link>
                 <Link to="/notifications">
-                  <Button variant="ghost" size="icon" className="relative hover:bg-muted rounded-full">
-                    <Bell className="h-5 w-5" />
-                    <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-primary pulse-dot shadow-lg shadow-primary/50" />
+                  <Button variant="ghost" size="icon" className="relative rounded-full h-9 w-9">
+                    <Bell className="h-4 w-4" />
+                    <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-primary pulse-dot" />
                   </Button>
                 </Link>
                 <Link to="/ai-chat">
-                  <Button variant="ghost" size="icon" title="AI Chat" className="hover:bg-muted rounded-full">
-                    <Bot className="h-5 w-5" />
+                  <Button variant="ghost" size="icon" title="AI Chat" className="rounded-full h-9 w-9">
+                    <Bot className="h-4 w-4" />
                   </Button>
                 </Link>
                 <Link to="/my-posts">
-                  <Button variant="ghost" size="icon" title="My Posts" className="hover:bg-muted rounded-full">
-                    <FileText className="h-5 w-5" />
+                  <Button variant="ghost" size="icon" title="My Posts" className="rounded-full h-9 w-9 hidden sm:flex">
+                    <FileText className="h-4 w-4" />
                   </Button>
                 </Link>
                 <Link to="/profile">
-                  <Button variant="ghost" size="icon" className="hover:bg-muted rounded-full">
-                    <User className="h-5 w-5" />
+                  <Button variant="ghost" size="icon" className="rounded-full h-9 w-9">
+                    <User className="h-4 w-4" />
                   </Button>
                 </Link>
-                <Button variant="ghost" size="icon" onClick={handleSignOut} className="hidden md:flex hover:bg-destructive/10 hover:text-destructive rounded-full">
-                  <LogOut className="h-5 w-5" />
+                <Button variant="ghost" size="icon" onClick={handleSignOut} className="hidden md:flex rounded-full h-9 w-9 hover:bg-destructive/10 hover:text-destructive">
+                  <LogOut className="h-4 w-4" />
                 </Button>
               </>
             ) : (
               <>
                 <Link to="/login">
-                  <Button variant="ghost" size="sm" className="rounded-full">
+                  <Button variant="ghost" size="sm" className="rounded-full text-sm">
                     Log in
                   </Button>
                 </Link>
                 <Link to="/signup">
-                  <Button variant="gradient" size="sm" className="rounded-full shadow-lg shadow-primary/20">
+                  <Button variant="gradient" size="sm" className="rounded-full shadow-md shadow-primary/20 text-sm">
                     Sign up
                   </Button>
                 </Link>
               </>
             )}
 
-            {/* Mobile Menu Button */}
+            {/* Mobile Menu Toggle */}
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden rounded-full"
+              className="md:hidden rounded-full h-9 w-9"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
-              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              {mobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
             </Button>
           </div>
         </div>
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-border/50 fade-in">
-            <div className="flex flex-col gap-2">
-              {navItems.map((item) => {
-                const isActive = location.pathname === item.path;
-                return (
-                  <Link 
-                    key={item.path} 
-                    to={item.path}
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <Button
-                      variant="ghost"
-                      className={cn(
-                        "w-full justify-start gap-3 rounded-xl",
-                        isActive && "bg-primary text-primary-foreground"
-                      )}
-                    >
-                      <item.icon className="h-5 w-5" />
-                      {item.label}
-                    </Button>
-                  </Link>
-                );
-              })}
+          <div className="md:hidden py-4 border-t border-border/40 fade-in">
+            <div className="flex flex-col gap-1">
               {user && (
                 <>
-                  <Link to="/create" onClick={() => setMobileMenuOpen(false)}>
-                    <Button variant="gradient" className="w-full justify-start gap-3 rounded-xl">
-                      <PenSquare className="h-5 w-5" />
-                      Create Post
-                    </Button>
-                  </Link>
                   <Link to="/ai-chat" onClick={() => setMobileMenuOpen(false)}>
-                    <Button variant="ghost" className="w-full justify-start gap-3 rounded-xl">
-                      <Bot className="h-5 w-5" />
+                    <Button variant="ghost" className="w-full justify-start gap-3 rounded-lg h-11 text-sm">
+                      <Bot className="h-4 w-4" />
                       AI Chat
                     </Button>
                   </Link>
                   <Link to="/my-posts" onClick={() => setMobileMenuOpen(false)}>
-                    <Button variant="ghost" className="w-full justify-start gap-3 rounded-xl">
-                      <FileText className="h-5 w-5" />
+                    <Button variant="ghost" className="w-full justify-start gap-3 rounded-lg h-11 text-sm">
+                      <FileText className="h-4 w-4" />
                       My Posts
                     </Button>
                   </Link>
-                  <Button 
-                    variant="ghost" 
-                    className="w-full justify-start gap-3 text-destructive hover:bg-destructive/10 rounded-xl"
-                    onClick={() => {
-                      handleSignOut();
-                      setMobileMenuOpen(false);
-                    }}
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start gap-3 text-destructive hover:bg-destructive/10 rounded-lg h-11 text-sm"
+                    onClick={() => { handleSignOut(); setMobileMenuOpen(false); }}
                   >
-                    <LogOut className="h-5 w-5" />
+                    <LogOut className="h-4 w-4" />
                     Sign Out
                   </Button>
                 </>
