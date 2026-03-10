@@ -4,13 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatDistanceToNow } from "date-fns";
-import { 
-  Bell, 
-  MessageCircle, 
-  ThumbsUp, 
-  CheckCheck,
-  ArrowRight
-} from "lucide-react";
+import { Bell, MessageCircle, ThumbsUp, CheckCheck, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
@@ -22,13 +16,7 @@ export default function Notifications() {
     queryKey: ["notifications", user?.id],
     queryFn: async () => {
       if (!user) return [];
-      const { data, error } = await supabase
-        .from("notifications")
-        .select("*")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false })
-        .limit(50);
-      
+      const { data, error } = await supabase.from("notifications").select("*").eq("user_id", user.id).order("created_at", { ascending: false }).limit(50);
       if (error) throw error;
       return data;
     },
@@ -36,54 +24,36 @@ export default function Notifications() {
   });
 
   const markAsRead = useMutation({
-    mutationFn: async (notificationId: string) => {
-      const { error } = await supabase
-        .from("notifications")
-        .update({ is_read: true })
-        .eq("id", notificationId);
-      
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("notifications").update({ is_read: true }).eq("id", id);
       if (error) throw error;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["notifications"] });
-    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["notifications"] }),
   });
 
   const markAllAsRead = useMutation({
     mutationFn: async () => {
       if (!user) return;
-      const { error } = await supabase
-        .from("notifications")
-        .update({ is_read: true })
-        .eq("user_id", user.id)
-        .eq("is_read", false);
-      
+      const { error } = await supabase.from("notifications").update({ is_read: true }).eq("user_id", user.id).eq("is_read", false);
       if (error) throw error;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["notifications"] });
-    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["notifications"] }),
   });
 
-  const getNotificationIcon = (type: string) => {
+  const getIcon = (type: string) => {
     switch (type) {
-      case 'comment':
-        return MessageCircle;
-      case 'upvote':
-        return ThumbsUp;
-      default:
-        return Bell;
+      case 'comment': return MessageCircle;
+      case 'upvote': return ThumbsUp;
+      default: return Bell;
     }
   };
 
   if (!user) {
     return (
       <div className="container mx-auto px-4 py-16 text-center">
-        <Bell className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-        <h2 className="text-2xl font-bold mb-4">Sign in to see notifications</h2>
-        <Link to="/login">
-          <Button variant="gradient">Sign In</Button>
-        </Link>
+        <Bell className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+        <h2 className="text-xl font-bold mb-4">Sign in to see notifications</h2>
+        <Link to="/login"><Button variant="gradient" className="rounded-full">Sign In</Button></Link>
       </div>
     );
   }
@@ -92,90 +62,57 @@ export default function Notifications() {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-2xl">
-      {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold mb-1">Notifications</h1>
-          <p className="text-muted-foreground text-sm">
-            {unreadCount > 0 ? `${unreadCount} unread` : 'All caught up!'}
-          </p>
+          <h1 className="text-xl font-bold mb-0.5">Notifications</h1>
+          <p className="text-muted-foreground text-xs">{unreadCount > 0 ? `${unreadCount} unread` : 'All caught up!'}</p>
         </div>
         {unreadCount > 0 && (
-          <Button 
-            variant="outline" 
-            size="sm" 
-            onClick={() => markAllAsRead.mutate()}
-            disabled={markAllAsRead.isPending}
-          >
-            <CheckCheck className="h-4 w-4 mr-2" />
-            Mark all read
+          <Button variant="outline" size="sm" onClick={() => markAllAsRead.mutate()} disabled={markAllAsRead.isPending} className="rounded-full text-xs h-8">
+            <CheckCheck className="h-3.5 w-3.5 mr-1.5" />Mark all read
           </Button>
         )}
       </div>
 
-      {/* Notifications List */}
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         {isLoading ? (
-          Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="p-4 rounded-lg glass border border-border/50">
-              <div className="flex gap-4">
-                <Skeleton className="h-10 w-10 rounded-full" />
-                <div className="flex-1 space-y-2">
-                  <Skeleton className="h-4 w-3/4" />
-                  <Skeleton className="h-3 w-24" />
-                </div>
+          Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="p-4 rounded-lg bg-card/50 border border-border/40">
+              <div className="flex gap-3">
+                <Skeleton className="h-9 w-9 rounded-full" />
+                <div className="flex-1 space-y-2"><Skeleton className="h-3.5 w-3/4" /><Skeleton className="h-2.5 w-20" /></div>
               </div>
             </div>
           ))
         ) : notifications && notifications.length > 0 ? (
-          notifications.map((notification) => {
-            const Icon = getNotificationIcon(notification.type);
+          notifications.map((n) => {
+            const Icon = getIcon(n.type);
             return (
               <div
-                key={notification.id}
+                key={n.id}
                 className={cn(
-                  "p-4 rounded-lg border transition-all cursor-pointer",
-                  notification.is_read 
-                    ? "glass border-border/50 hover:border-border" 
-                    : "glass border-primary/30 bg-primary/5 hover:border-primary/50"
+                  "p-3.5 rounded-lg border transition-all cursor-pointer",
+                  n.is_read
+                    ? "bg-card/30 border-border/30 hover:border-border/50"
+                    : "bg-primary/5 border-primary/20 hover:border-primary/30"
                 )}
-                onClick={() => {
-                  if (!notification.is_read) {
-                    markAsRead.mutate(notification.id);
-                  }
-                }}
+                onClick={() => { if (!n.is_read) markAsRead.mutate(n.id); }}
               >
-                <div className="flex gap-4">
+                <div className="flex gap-3">
                   <div className={cn(
-                    "h-10 w-10 rounded-full flex items-center justify-center",
-                    notification.is_read ? "bg-muted" : "gradient-primary"
+                    "h-9 w-9 rounded-full flex items-center justify-center flex-shrink-0",
+                    n.is_read ? "bg-muted" : "gradient-primary"
                   )}>
-                    <Icon className={cn(
-                      "h-5 w-5",
-                      notification.is_read ? "text-muted-foreground" : "text-primary-foreground"
-                    )} />
+                    <Icon className={cn("h-4 w-4", n.is_read ? "text-muted-foreground" : "text-primary-foreground")} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className={cn(
-                      "text-sm",
-                      !notification.is_read && "font-medium"
-                    )}>
-                      {notification.title}
-                    </p>
-                    {notification.message && (
-                      <p className="text-sm text-muted-foreground line-clamp-1">
-                        {notification.message}
-                      </p>
-                    )}
-                    <p className="text-xs text-muted-foreground mt-1">
-                      {formatDistanceToNow(new Date(notification.created_at), { addSuffix: true })}
-                    </p>
+                    <p className={cn("text-sm", !n.is_read && "font-medium")}>{n.title}</p>
+                    {n.message && <p className="text-xs text-muted-foreground line-clamp-1">{n.message}</p>}
+                    <p className="text-[10px] text-muted-foreground mt-0.5">{formatDistanceToNow(new Date(n.created_at), { addSuffix: true })}</p>
                   </div>
-                  {notification.related_post_id && (
-                    <Link to={`/post/${notification.related_post_id}`}>
-                      <Button variant="ghost" size="icon" className="h-8 w-8">
-                        <ArrowRight className="h-4 w-4" />
-                      </Button>
+                  {n.related_post_id && (
+                    <Link to={`/post/${n.related_post_id}`}>
+                      <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full"><ArrowRight className="h-3.5 w-3.5" /></Button>
                     </Link>
                   )}
                 </div>
@@ -183,12 +120,10 @@ export default function Notifications() {
             );
           })
         ) : (
-          <div className="text-center py-16">
-            <Bell className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-            <h3 className="text-xl font-semibold mb-2">No notifications yet</h3>
-            <p className="text-muted-foreground">
-              When someone interacts with your posts, you'll see it here
-            </p>
+          <div className="text-center py-20">
+            <Bell className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+            <h3 className="text-lg font-semibold mb-1">No notifications yet</h3>
+            <p className="text-muted-foreground text-sm">When someone interacts with your posts, you'll see it here</p>
           </div>
         )}
       </div>

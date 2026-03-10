@@ -5,14 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { PostCard } from "@/components/posts/PostCard";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { 
-  PenSquare, 
-  TrendingUp, 
-  Clock, 
-  Flame,
-  Filter,
-  EyeOff
-} from "lucide-react";
+import { PenSquare, TrendingUp, Clock, Flame, EyeOff } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/ui/scroll-reveal";
 
@@ -25,21 +18,14 @@ export default function Confessions() {
   const { data: posts, isLoading } = useQuery({
     queryKey: ["confessions", sortBy],
     queryFn: async () => {
-      // Use posts_public view to protect anonymous user identities
       let query = supabase
         .from("posts_public")
-        .select(`
-          *,
-          communities (name, icon)
-        `)
+        .select(`*, communities (name, icon)`)
         .eq("post_type", "confession");
 
       if (sortBy === 'new') {
         query = query.order("created_at", { ascending: false });
-      } else if (sortBy === 'top') {
-        query = query.order("upvotes", { ascending: false });
       } else {
-        // 'hot' - could be a combination, for now use upvotes
         query = query.order("upvotes", { ascending: false });
       }
 
@@ -57,24 +43,19 @@ export default function Confessions() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
         <ScrollReveal direction="left" blur>
-          <div className="flex items-center gap-3 mb-2">
-            <h1 className="text-3xl font-bold">
-              <span className="gradient-text">Confessions</span>
-            </h1>
-            <EyeOff className="h-6 w-6 text-primary animate-pulse-scale" />
+          <div className="flex items-center gap-2.5 mb-1">
+            <EyeOff className="h-5 w-5 text-primary" />
+            <h1 className="text-2xl font-bold">Confessions</h1>
           </div>
-          <p className="text-muted-foreground">
-            Share your thoughts anonymously. No judgment here.
-          </p>
+          <p className="text-muted-foreground text-sm">Share your thoughts anonymously. No judgment here.</p>
         </ScrollReveal>
         {user && (
           <ScrollReveal direction="right" blur delay={0.1}>
             <Link to="/create?type=confession">
-              <Button variant="gradient" className="gap-2 group shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-shadow">
-                <PenSquare className="h-4 w-4 group-hover:rotate-12 transition-transform" />
+              <Button variant="gradient" size="sm" className="gap-2 rounded-full shadow-md shadow-primary/20">
+                <PenSquare className="h-3.5 w-3.5" />
                 Confess Something
               </Button>
             </Link>
@@ -82,10 +63,8 @@ export default function Confessions() {
         )}
       </div>
 
-      {/* Sort Options */}
       <ScrollReveal direction="up" blur delay={0.15}>
-        <div className="flex items-center gap-2 mb-6 overflow-x-auto pb-2">
-          <Filter className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+        <div className="flex items-center gap-1.5 mb-6">
           {sortOptions.map((option) => {
             const Icon = option.icon;
             return (
@@ -94,9 +73,9 @@ export default function Confessions() {
                 variant={sortBy === option.value ? "secondary" : "ghost"}
                 size="sm"
                 onClick={() => setSortBy(option.value)}
-                className={`gap-2 transition-all duration-300 ${sortBy === option.value ? 'scale-105 shadow-md' : 'hover:scale-105'}`}
+                className={`gap-1.5 rounded-full text-xs h-8 ${sortBy === option.value ? '' : ''}`}
               >
-                <Icon className={`h-4 w-4 ${sortBy === option.value ? 'animate-pulse-scale' : ''}`} />
+                <Icon className="h-3.5 w-3.5" />
                 {option.label}
               </Button>
             );
@@ -104,16 +83,10 @@ export default function Confessions() {
         </div>
       </ScrollReveal>
 
-      {/* Posts List */}
-      <div className="space-y-4">
+      <div className="space-y-3">
         {isLoading ? (
-          // Loading skeletons
-          Array.from({ length: 5 }).map((_, i) => (
-            <div 
-              key={i} 
-              className="p-6 rounded-xl glass border border-border/50 animate-pulse"
-              style={{ animationDelay: `${i * 100}ms` }}
-            >
+          Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="p-5 rounded-xl bg-card/50 border border-border/40 animate-pulse">
               <div className="flex gap-4">
                 <div className="flex flex-col items-center gap-2">
                   <Skeleton className="h-8 w-8 rounded" />
@@ -121,16 +94,16 @@ export default function Confessions() {
                   <Skeleton className="h-8 w-8 rounded" />
                 </div>
                 <div className="flex-1 space-y-3">
-                  <Skeleton className="h-4 w-32" />
-                  <Skeleton className="h-6 w-3/4" />
-                  <Skeleton className="h-16 w-full" />
-                  <Skeleton className="h-8 w-48" />
+                  <Skeleton className="h-3 w-24" />
+                  <Skeleton className="h-5 w-3/4" />
+                  <Skeleton className="h-12 w-full" />
+                  <Skeleton className="h-7 w-32" />
                 </div>
               </div>
             </div>
           ))
         ) : posts && posts.length > 0 ? (
-          <StaggerContainer className="space-y-4" staggerDelay={0.08}>
+          <StaggerContainer className="space-y-3" staggerDelay={0.06}>
             {posts.map((post) => (
               <StaggerItem key={post.id} blur>
                 <PostCard post={post} />
@@ -139,24 +112,20 @@ export default function Confessions() {
           </StaggerContainer>
         ) : (
           <ScrollReveal direction="up" blur scale>
-            <div className="text-center py-16">
-              <div className="text-6xl mb-4 animate-float">🤫</div>
-              <h3 className="text-xl font-semibold mb-2">No confessions yet</h3>
-              <p className="text-muted-foreground mb-6">
-                Be the first to share what's on your mind
-              </p>
+            <div className="text-center py-20">
+              <div className="text-5xl mb-4">🤫</div>
+              <h3 className="text-lg font-semibold mb-2">No confessions yet</h3>
+              <p className="text-muted-foreground text-sm mb-6">Be the first to share what's on your mind</p>
               {user ? (
                 <Link to="/create?type=confession">
-                  <Button variant="gradient" className="gap-2 group">
-                    <PenSquare className="h-4 w-4 group-hover:rotate-12 transition-transform" />
+                  <Button variant="gradient" className="gap-2 rounded-full">
+                    <PenSquare className="h-4 w-4" />
                     Write a Confession
                   </Button>
                 </Link>
               ) : (
                 <Link to="/signup">
-                  <Button variant="gradient">
-                    Sign up to confess
-                  </Button>
+                  <Button variant="gradient" className="rounded-full">Sign up to confess</Button>
                 </Link>
               )}
             </div>

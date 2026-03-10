@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
-import { 
-  ArrowUp, 
-  ArrowDown, 
-  MessageCircle, 
+import {
+  ArrowUp,
+  ArrowDown,
+  MessageCircle,
   MoreHorizontal,
   Eye,
   EyeOff,
@@ -41,11 +41,11 @@ interface PostCardProps {
 }
 
 const postTypeConfig = {
-  confession: { icon: EyeOff, label: "Confession", color: "bg-primary/20 text-primary" },
-  question: { icon: HelpCircle, label: "Question", color: "bg-accent/20 text-accent" },
-  rant: { icon: Megaphone, label: "Rant", color: "bg-destructive/20 text-destructive" },
-  advice: { icon: Lightbulb, label: "Advice", color: "bg-warning/20 text-warning" },
-  discussion: { icon: MessageSquare, label: "Discussion", color: "bg-muted text-foreground" },
+  confession: { icon: EyeOff, label: "Confession", color: "bg-primary/15 text-primary" },
+  question: { icon: HelpCircle, label: "Question", color: "bg-accent/15 text-accent" },
+  rant: { icon: Megaphone, label: "Rant", color: "bg-destructive/15 text-destructive" },
+  advice: { icon: Lightbulb, label: "Advice", color: "bg-warning/15 text-warning" },
+  discussion: { icon: MessageSquare, label: "Discussion", color: "bg-muted text-muted-foreground" },
 };
 
 export function PostCard({ post }: PostCardProps) {
@@ -58,23 +58,23 @@ export function PostCard({ post }: PostCardProps) {
   const typeConfig = postTypeConfig[post.post_type];
   const TypeIcon = typeConfig.icon;
 
-  const displayName = post.identity_type === 'anonymous' 
-    ? 'Anonymous' 
-    : post.identity_type === 'pseudonymous' 
+  const displayName = post.identity_type === 'anonymous'
+    ? 'Anonymous'
+    : post.identity_type === 'pseudonymous'
       ? post.pseudonym || 'Anonymous'
       : 'User';
 
   return (
-    <article className="group p-4 md:p-6 rounded-xl glass border border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-1">
-      <div className="flex gap-4">
-        {/* Vote Section */}
-        <div className="flex flex-col items-center gap-1">
+    <article className="group p-4 md:p-5 rounded-xl bg-card/60 backdrop-blur-sm border border-border/40 hover:border-primary/20 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5">
+      <div className="flex gap-3 md:gap-4">
+        {/* Vote Column */}
+        <div className="flex flex-col items-center gap-0.5 pt-1">
           <Button
             variant="ghost"
             size="icon"
             className={cn(
-              "h-8 w-8 transition-all duration-300 hover:scale-110",
-              vote === 1 && "text-primary bg-primary/20 shadow-lg shadow-primary/20"
+              "h-8 w-8 rounded-lg transition-all",
+              vote === 1 && "text-primary bg-primary/15"
             )}
             onClick={handleUpvote}
             disabled={isVoting}
@@ -82,13 +82,13 @@ export function PostCard({ post }: PostCardProps) {
             {isVoting ? (
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
-              <ArrowUp className={cn("h-5 w-5 transition-transform", vote === 1 && "animate-bounce-in")} />
+              <ArrowUp className="h-4 w-4" />
             )}
           </Button>
           <span className={cn(
-            "text-sm font-semibold transition-all duration-300",
-            totalVotes > 0 && "text-primary scale-110",
-            totalVotes < 0 && "text-destructive scale-110"
+            "text-sm font-bold tabular-nums",
+            totalVotes > 0 && "text-primary",
+            totalVotes < 0 && "text-destructive"
           )}>
             {totalVotes}
           </span>
@@ -96,39 +96,35 @@ export function PostCard({ post }: PostCardProps) {
             variant="ghost"
             size="icon"
             className={cn(
-              "h-8 w-8 transition-all duration-300 hover:scale-110",
-              vote === -1 && "text-destructive bg-destructive/20 shadow-lg shadow-destructive/20"
+              "h-8 w-8 rounded-lg transition-all",
+              vote === -1 && "text-destructive bg-destructive/15"
             )}
             onClick={handleDownvote}
             disabled={isVoting}
           >
-            <ArrowDown className={cn("h-5 w-5 transition-transform", vote === -1 && "animate-bounce-in")} />
+            <ArrowDown className="h-4 w-4" />
           </Button>
         </div>
 
-        {/* Content Section */}
+        {/* Content */}
         <div className="flex-1 min-w-0">
-          {/* Header */}
-          <div className="flex flex-wrap items-center gap-2 mb-2 text-sm">
-            <Badge variant="outline" className={cn("gap-1 border-0 transition-transform hover:scale-105", typeConfig.color)}>
+          {/* Meta row */}
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-2 text-xs">
+            <Badge variant="outline" className={cn("gap-1 border-0 text-xs font-medium px-2 py-0.5", typeConfig.color)}>
               <TypeIcon className="h-3 w-3" />
               {typeConfig.label}
             </Badge>
             {post.communities && (
-              <span className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
+              <span className="text-muted-foreground">
                 {post.communities.icon} {post.communities.name}
               </span>
             )}
-            <span className="text-muted-foreground">•</span>
+            <span className="text-muted-foreground/50">·</span>
             <span className="text-muted-foreground flex items-center gap-1">
-              {post.identity_type === 'anonymous' ? (
-                <EyeOff className="h-3 w-3" />
-              ) : (
-                <Eye className="h-3 w-3" />
-              )}
+              {post.identity_type === 'anonymous' ? <EyeOff className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
               {displayName}
             </span>
-            <span className="text-muted-foreground">•</span>
+            <span className="text-muted-foreground/50">·</span>
             <span className="text-muted-foreground">
               {formatDistanceToNow(new Date(post.created_at), { addSuffix: true })}
             </span>
@@ -136,26 +132,27 @@ export function PostCard({ post }: PostCardProps) {
 
           {/* Title */}
           <Link to={`/post/${post.id}`}>
-            <h3 className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors line-clamp-2 hover:underline decoration-primary/50 underline-offset-4">
+            <h3 className="text-base font-semibold mb-1.5 group-hover:text-primary transition-colors line-clamp-2 leading-snug">
               {post.title}
             </h3>
           </Link>
 
-          {/* Content Preview */}
-          <p className="text-muted-foreground text-sm line-clamp-3 mb-4 group-hover:text-muted-foreground/80 transition-colors">
+          {/* Preview */}
+          <p className="text-muted-foreground text-sm line-clamp-2 mb-3 leading-relaxed">
             {post.content}
           </p>
 
-          <div className="flex items-center gap-4">
+          {/* Actions */}
+          <div className="flex items-center gap-1">
             <Link to={`/post/${post.id}`}>
-              <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground hover:bg-muted transition-all group/btn">
-                <MessageCircle className="h-4 w-4 group-hover/btn:scale-110 transition-transform" />
-                {post.comment_count ?? 0} Comments
+              <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground hover:text-foreground h-8 text-xs rounded-lg">
+                <MessageCircle className="h-3.5 w-3.5" />
+                {post.comment_count ?? 0}
               </Button>
             </Link>
             <ShareMenu postId={post.id} title={post.title} />
-            <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground ml-auto hover:rotate-90 transition-transform duration-300">
-              <MoreHorizontal className="h-4 w-4" />
+            <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground ml-auto rounded-lg">
+              <MoreHorizontal className="h-3.5 w-3.5" />
             </Button>
           </div>
         </div>

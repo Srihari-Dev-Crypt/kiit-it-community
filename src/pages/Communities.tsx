@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Users, ArrowRight, Sparkles } from "lucide-react";
+import { Users, ArrowRight } from "lucide-react";
 import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/ui/scroll-reveal";
 
 export default function Communities() {
@@ -14,7 +14,6 @@ export default function Communities() {
         .from("communities")
         .select("*")
         .order("member_count", { ascending: false });
-      
       if (error) throw error;
       return data;
     },
@@ -22,62 +21,51 @@ export default function Communities() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      {/* Header */}
       <ScrollReveal direction="down" blur className="mb-8">
-        <div className="flex items-center gap-3 mb-2">
-          <h1 className="text-3xl font-bold">
-            <span className="gradient-text">Communities</span>
-          </h1>
-          <Sparkles className="h-6 w-6 text-primary animate-pulse-scale" />
+        <div className="flex items-center gap-2.5 mb-1">
+          <Users className="h-5 w-5 text-primary" />
+          <h1 className="text-2xl font-bold">Communities</h1>
         </div>
-        <p className="text-muted-foreground">
-          Join topic-based communities and connect with like-minded students
-        </p>
+        <p className="text-muted-foreground text-sm">Join topic-based communities and connect with like-minded students</p>
       </ScrollReveal>
 
-      {/* Communities Grid */}
       {isLoading ? (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div 
-              key={i} 
-              className="p-6 rounded-xl glass border border-border/50 animate-pulse"
-              style={{ animationDelay: `${i * 100}ms` }}
-            >
-              <Skeleton className="h-12 w-12 rounded-lg mb-4" />
-              <Skeleton className="h-6 w-32 mb-2" />
-              <Skeleton className="h-4 w-full mb-4" />
-              <Skeleton className="h-9 w-24" />
+            <div key={i} className="p-5 rounded-xl bg-card/50 border border-border/40 animate-pulse">
+              <Skeleton className="h-10 w-10 rounded-lg mb-4" />
+              <Skeleton className="h-5 w-28 mb-2" />
+              <Skeleton className="h-3 w-full mb-4" />
+              <Skeleton className="h-8 w-24" />
             </div>
           ))}
         </div>
       ) : communities && communities.length > 0 ? (
-        <StaggerContainer className="grid md:grid-cols-2 lg:grid-cols-3 gap-6" staggerDelay={0.1}>
+        <StaggerContainer className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4" staggerDelay={0.08}>
           {communities.map((community) => (
             <StaggerItem key={community.id} blur>
-              <div className="group p-6 rounded-xl glass border border-border/50 hover:border-primary/50 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-primary/10 h-full">
-                <div className="flex items-start justify-between mb-4">
-                  <div className="h-12 w-12 rounded-lg bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center text-2xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-lg">
+              <div className="group p-5 rounded-xl bg-card/50 border border-border/40 hover:border-primary/25 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/5 h-full flex flex-col">
+                <div className="flex items-start justify-between mb-3">
+                  <div className="h-10 w-10 rounded-lg gradient-primary flex items-center justify-center text-xl group-hover:scale-105 transition-transform">
                     {community.icon || '💬'}
                   </div>
-                  <div className="flex items-center gap-1 text-sm text-muted-foreground group-hover:text-primary transition-colors">
-                    <Users className="h-4 w-4" />
+                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <Users className="h-3.5 w-3.5" />
                     <span>{community.member_count || 0}</span>
                   </div>
                 </div>
-                
-                <h3 className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors">
+
+                <h3 className="text-sm font-semibold mb-1 group-hover:text-primary transition-colors">
                   {community.name}
                 </h3>
-                
-                <p className="text-sm text-muted-foreground mb-4 line-clamp-2 group-hover:text-muted-foreground/80 transition-colors">
+                <p className="text-xs text-muted-foreground mb-4 line-clamp-2 flex-1">
                   {community.description || 'Join the conversation'}
                 </p>
-                
+
                 <Link to={`/community/${community.id}`}>
-                  <Button variant="outline" size="sm" className="gap-2 group/btn hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-300">
+                  <Button variant="outline" size="sm" className="gap-1.5 rounded-full text-xs h-8 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all">
                     View Community
-                    <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
+                    <ArrowRight className="h-3 w-3 group-hover:translate-x-0.5 transition-transform" />
                   </Button>
                 </Link>
               </div>
@@ -86,12 +74,10 @@ export default function Communities() {
         </StaggerContainer>
       ) : (
         <ScrollReveal direction="up" blur scale>
-          <div className="text-center py-16">
-            <div className="text-6xl mb-4 animate-float">🏘️</div>
-            <h3 className="text-xl font-semibold mb-2">No communities yet</h3>
-            <p className="text-muted-foreground">
-              Communities are being set up!
-            </p>
+          <div className="text-center py-20">
+            <div className="text-5xl mb-4">🏘️</div>
+            <h3 className="text-lg font-semibold mb-2">No communities yet</h3>
+            <p className="text-muted-foreground text-sm">Communities are being set up!</p>
           </div>
         </ScrollReveal>
       )}
