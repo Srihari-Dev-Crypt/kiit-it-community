@@ -47,14 +47,14 @@ export default function Confessions() {
         <ScrollReveal direction="left" blur>
           <div className="flex items-center gap-2.5 mb-1">
             <EyeOff className="h-5 w-5 text-primary" />
-            <h1 className="text-2xl font-bold">Confessions</h1>
+            <h1 className="font-display text-2xl font-bold">Confessions</h1>
           </div>
           <p className="text-muted-foreground text-sm">Share your thoughts anonymously. No judgment here.</p>
         </ScrollReveal>
         {user && (
           <ScrollReveal direction="right" blur delay={0.1}>
             <Link to="/create?type=confession">
-              <Button variant="gradient" size="sm" className="gap-2 rounded-full shadow-md shadow-primary/20">
+              <Button variant="gradient" size="sm" className="gap-2 rounded-full">
                 <PenSquare className="h-3.5 w-3.5" />
                 Confess Something
               </Button>
@@ -73,7 +73,7 @@ export default function Confessions() {
                 variant={sortBy === option.value ? "secondary" : "ghost"}
                 size="sm"
                 onClick={() => setSortBy(option.value)}
-                className={`gap-1.5 rounded-full text-xs h-8 ${sortBy === option.value ? '' : ''}`}
+                className="gap-1.5 rounded-full text-xs h-8"
               >
                 <Icon className="h-3.5 w-3.5" />
                 {option.label}
@@ -86,7 +86,7 @@ export default function Confessions() {
       <div className="space-y-3">
         {isLoading ? (
           Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="p-5 rounded-xl bg-card/50 border border-border/40 animate-pulse">
+            <div key={i} className="p-5 rounded-card bg-card border border-border animate-pulse">
               <div className="flex gap-4">
                 <div className="flex flex-col items-center gap-2">
                   <Skeleton className="h-8 w-8 rounded" />
@@ -119,8 +119,7 @@ export default function Confessions() {
               {user ? (
                 <Link to="/create?type=confession">
                   <Button variant="gradient" className="gap-2 rounded-full">
-                    <PenSquare className="h-4 w-4" />
-                    Write a Confession
+                    <PenSquare className="h-4 w-4" />Write a Confession
                   </Button>
                 </Link>
               ) : (

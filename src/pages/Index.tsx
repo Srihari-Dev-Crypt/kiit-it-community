@@ -1,12 +1,6 @@
 import { Link } from "react-router-dom";
 import {
-  MessageSquare,
-  HelpCircle,
-  Users,
-  Shield,
-  ThumbsUp,
-  Sparkles,
-  ArrowRight,
+  MessageSquare, HelpCircle, Users, Shield, ArrowRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
@@ -14,7 +8,6 @@ import { PostCard } from "@/components/posts/PostCard";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/ui/scroll-reveal";
-import { FloatingParticles } from "@/components/ui/floating-particles";
 
 const features = [
   {
@@ -59,25 +52,20 @@ export default function Index() {
     <div className="min-h-screen">
       {/* Hero */}
       <section className="relative py-24 md:py-36 overflow-hidden">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-40 -left-40 w-[500px] h-[500px] bg-primary/12 rounded-full blur-[100px] animate-float" />
-          <div className="absolute -bottom-20 -right-20 w-[500px] h-[500px] bg-accent/8 rounded-full blur-[100px] animate-float" style={{ animationDelay: "-3s" }} />
-          <div className="absolute top-1/3 right-1/4 w-[300px] h-[300px] bg-primary/6 rounded-full blur-[80px] animate-float" style={{ animationDelay: "-5s" }} />
-          <FloatingParticles count={15} />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,transparent_0%,hsl(var(--background))_70%)]" />
-        </div>
+        {/* Subtle green accent blob */}
+        <div className="absolute -top-32 -right-32 w-[400px] h-[400px] bg-primary/8 rounded-full blur-[100px] pointer-events-none" />
 
         <div className="container mx-auto px-4 text-center relative z-10">
           <div className="max-w-3xl mx-auto">
             <ScrollReveal delay={0} direction="down" blur>
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass border border-border/40 mb-8">
-                <Sparkles className="h-3.5 w-3.5 text-primary animate-pulse-scale" />
-                <span className="text-xs font-medium text-muted-foreground">Anonymous · Safe · Student-first</span>
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-green-soft border border-primary/20 mb-8">
+                <span className="h-2 w-2 rounded-full bg-primary" />
+                <span className="text-xs font-medium text-foreground">Anonymous · Safe · Student-first</span>
               </div>
             </ScrollReveal>
 
             <ScrollReveal delay={0.1} direction="up" blur scale>
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-6 tracking-tight leading-[1.1]">
+              <h1 className="font-display text-4xl md:text-6xl lg:text-7xl font-extrabold mb-6 tracking-tight leading-[1.1] text-foreground">
                 Got something on
                 <br />your mind?{" "}
                 <span className="gradient-text">KIIT IT</span>
@@ -96,7 +84,7 @@ export default function Index() {
                 {user ? (
                   <>
                     <Link to="/create">
-                      <Button variant="gradient" size="xl" className="gap-2 group rounded-full shadow-lg shadow-primary/25">
+                      <Button variant="gradient" size="xl" className="gap-2 group rounded-full">
                         Create a Post
                         <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
                       </Button>
@@ -110,7 +98,7 @@ export default function Index() {
                 ) : (
                   <>
                     <Link to="/signup">
-                      <Button variant="gradient" size="xl" className="gap-2 group rounded-full shadow-lg shadow-primary/25">
+                      <Button variant="gradient" size="xl" className="gap-2 group rounded-full">
                         Get Started Free
                         <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
                       </Button>
@@ -129,10 +117,10 @@ export default function Index() {
       </section>
 
       {/* Features */}
-      <section className="py-20 border-t border-border/30">
+      <section className="py-section border-t border-border">
         <div className="container mx-auto px-4">
           <ScrollReveal direction="up" blur className="text-center mb-14">
-            <h2 className="text-2xl md:text-3xl font-bold mb-3">
+            <h2 className="font-display text-2xl md:text-3xl font-bold mb-3">
               Everything you need to <span className="gradient-text-primary">express yourself</span>
             </h2>
             <p className="text-muted-foreground max-w-lg mx-auto text-sm">
@@ -143,9 +131,9 @@ export default function Index() {
           <StaggerContainer className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4" staggerDelay={0.1}>
             {features.map((feature) => (
               <StaggerItem key={feature.title} blur>
-                <div className="group p-5 rounded-xl bg-card/50 border border-border/40 hover:border-primary/25 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/5 h-full">
-                  <div className="w-10 h-10 rounded-lg gradient-primary flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
-                    <feature.icon className="h-5 w-5 text-primary-foreground" />
+                <div className="group p-6 rounded-card bg-card border border-border shadow-card hover:shadow-card-hover transition-all duration-normal hover:-translate-y-1 h-full">
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/15 transition-colors">
+                    <feature.icon className="h-5 w-5 text-primary" />
                   </div>
                   <h3 className="text-sm font-semibold mb-1.5 group-hover:text-primary transition-colors">{feature.title}</h3>
                   <p className="text-xs text-muted-foreground leading-relaxed">{feature.description}</p>
@@ -158,12 +146,12 @@ export default function Index() {
 
       {/* Recent Posts */}
       {recentPosts && recentPosts.length > 0 && (
-        <section className="py-20 border-t border-border/30">
+        <section className="py-section border-t border-border">
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between mb-8">
               <ScrollReveal direction="left" blur>
                 <div>
-                  <h2 className="text-xl md:text-2xl font-bold mb-1">Recent Posts</h2>
+                  <h2 className="font-display text-xl md:text-2xl font-bold mb-1">Recent Posts</h2>
                   <p className="text-muted-foreground text-sm">See what's happening in the community</p>
                 </div>
               </ScrollReveal>
@@ -189,7 +177,7 @@ export default function Index() {
       )}
 
       {/* Stats */}
-      <section className="py-20 border-t border-border/30">
+      <section className="py-section border-t border-border">
         <div className="container mx-auto px-4">
           <StaggerContainer className="grid md:grid-cols-3 gap-4" staggerDelay={0.1}>
             {[
@@ -198,8 +186,8 @@ export default function Index() {
               { value: "∞", label: "Topics to Explore" },
             ].map((stat) => (
               <StaggerItem key={stat.label} blur>
-                <div className="p-6 rounded-xl bg-card/50 border border-border/40 hover:border-primary/25 transition-all duration-300 hover:-translate-y-1 group text-center">
-                  <div className="text-3xl font-extrabold gradient-text mb-1 inline-block">{stat.value}</div>
+                <div className="p-6 rounded-card bg-card border border-border shadow-card hover:shadow-card-hover transition-all duration-normal hover:-translate-y-1 group text-center">
+                  <div className="text-3xl font-extrabold gradient-text mb-1 inline-block font-display">{stat.value}</div>
                   <div className="text-sm text-muted-foreground">{stat.label}</div>
                 </div>
               </StaggerItem>
@@ -209,11 +197,11 @@ export default function Index() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 border-t border-border/30">
+      <section className="py-section border-t border-border">
         <div className="container mx-auto px-4">
           <ScrollReveal direction="up" blur scale>
-            <div className="max-w-2xl mx-auto text-center p-8 md:p-10 rounded-2xl gradient-border glass">
-              <h2 className="text-xl md:text-3xl font-bold mb-3">
+            <div className="max-w-2xl mx-auto text-center p-8 md:p-10 rounded-2xl bg-card border border-border shadow-card">
+              <h2 className="font-display text-xl md:text-3xl font-bold mb-3">
                 Ready to share what's on your mind?
               </h2>
               <p className="text-muted-foreground text-sm mb-8 max-w-md mx-auto">
@@ -221,14 +209,14 @@ export default function Index() {
               </p>
               {user ? (
                 <Link to="/create">
-                  <Button variant="gradient" size="lg" className="gap-2 group rounded-full shadow-lg shadow-primary/25">
-                    <ThumbsUp className="h-4 w-4" />
+                  <Button variant="gradient" size="lg" className="gap-2 group rounded-full">
                     Create Your First Post
+                    <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </Link>
               ) : (
                 <Link to="/signup">
-                  <Button variant="gradient" size="lg" className="gap-2 group rounded-full shadow-lg shadow-primary/25">
+                  <Button variant="gradient" size="lg" className="gap-2 group rounded-full">
                     Join KIIT IT Now
                     <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                   </Button>

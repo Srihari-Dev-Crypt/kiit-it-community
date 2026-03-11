@@ -1,17 +1,8 @@
 import { Link } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
 import {
-  ArrowUp,
-  ArrowDown,
-  MessageCircle,
-  MoreHorizontal,
-  Eye,
-  EyeOff,
-  HelpCircle,
-  MessageSquare,
-  Lightbulb,
-  Megaphone,
-  Loader2,
+  ArrowUp, ArrowDown, MessageCircle, MoreHorizontal,
+  Eye, EyeOff, HelpCircle, MessageSquare, Lightbulb, Megaphone, Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -30,10 +21,7 @@ interface Post {
   downvotes: number | null;
   comment_count: number | null;
   created_at: string;
-  communities?: {
-    name: string;
-    icon: string | null;
-  } | null;
+  communities?: { name: string; icon: string | null } | null;
 }
 
 interface PostCardProps {
@@ -41,11 +29,11 @@ interface PostCardProps {
 }
 
 const postTypeConfig = {
-  confession: { icon: EyeOff, label: "Confession", color: "bg-primary/15 text-primary" },
-  question: { icon: HelpCircle, label: "Question", color: "bg-accent/15 text-accent" },
-  rant: { icon: Megaphone, label: "Rant", color: "bg-destructive/15 text-destructive" },
-  advice: { icon: Lightbulb, label: "Advice", color: "bg-warning/15 text-warning" },
-  discussion: { icon: MessageSquare, label: "Discussion", color: "bg-muted text-muted-foreground" },
+  confession: { icon: EyeOff, label: "Confession", color: "bg-primary/10 text-foreground" },
+  question: { icon: HelpCircle, label: "Question", color: "bg-blue-50 text-blue-700" },
+  rant: { icon: Megaphone, label: "Rant", color: "bg-red-50 text-red-700" },
+  advice: { icon: Lightbulb, label: "Advice", color: "bg-amber-50 text-amber-700" },
+  discussion: { icon: MessageSquare, label: "Discussion", color: "bg-secondary text-muted-foreground" },
 };
 
 export function PostCard({ post }: PostCardProps) {
@@ -65,7 +53,7 @@ export function PostCard({ post }: PostCardProps) {
       : 'User';
 
   return (
-    <article className="group p-4 md:p-5 rounded-xl bg-card/60 backdrop-blur-sm border border-border/40 hover:border-primary/20 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5">
+    <article className="group p-4 md:p-5 rounded-card bg-card border border-border shadow-card hover:shadow-card-hover transition-all duration-normal">
       <div className="flex gap-3 md:gap-4">
         {/* Vote Column */}
         <div className="flex flex-col items-center gap-0.5 pt-1">
@@ -74,16 +62,12 @@ export function PostCard({ post }: PostCardProps) {
             size="icon"
             className={cn(
               "h-8 w-8 rounded-lg transition-all",
-              vote === 1 && "text-primary bg-primary/15"
+              vote === 1 && "text-primary bg-primary/10"
             )}
             onClick={handleUpvote}
             disabled={isVoting}
           >
-            {isVoting ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <ArrowUp className="h-4 w-4" />
-            )}
+            {isVoting ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowUp className="h-4 w-4" />}
           </Button>
           <span className={cn(
             "text-sm font-bold tabular-nums",
@@ -97,7 +81,7 @@ export function PostCard({ post }: PostCardProps) {
             size="icon"
             className={cn(
               "h-8 w-8 rounded-lg transition-all",
-              vote === -1 && "text-destructive bg-destructive/15"
+              vote === -1 && "text-destructive bg-destructive/10"
             )}
             onClick={handleDownvote}
             disabled={isVoting}

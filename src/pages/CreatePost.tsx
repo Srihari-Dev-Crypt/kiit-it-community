@@ -108,7 +108,7 @@ export default function CreatePost() {
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div>
-          <h1 className="text-xl font-bold">Create a Post</h1>
+          <h1 className="font-display text-xl font-bold">Create a Post</h1>
           <p className="text-muted-foreground text-xs">Share what's on your mind</p>
         </div>
       </div>
@@ -127,10 +127,10 @@ export default function CreatePost() {
                   type="button"
                   onClick={() => setValue('post_type', type.value as PostForm['post_type'])}
                   className={cn(
-                    "p-3 rounded-lg border text-left transition-all",
+                    "p-3 rounded-card border text-left transition-all",
                     isSelected
-                      ? "border-primary bg-primary/10"
-                      : "border-border/40 hover:border-primary/30 bg-card/30"
+                      ? "border-primary bg-primary/5"
+                      : "border-border hover:border-primary/30 bg-card"
                   )}
                 >
                   <Icon className={cn("h-4 w-4 mb-1.5", isSelected ? "text-primary" : "text-muted-foreground")} />
@@ -170,7 +170,7 @@ export default function CreatePost() {
         </div>
 
         {/* Privacy */}
-        <div className="p-4 rounded-xl bg-card/50 border border-border/40 space-y-3">
+        <div className="p-4 rounded-card bg-card border border-border space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               {isAnonymous ? <EyeOff className="h-4 w-4 text-primary" /> : <Eye className="h-4 w-4 text-muted-foreground" />}
@@ -183,7 +183,7 @@ export default function CreatePost() {
           </div>
 
           {!isAnonymous && (
-            <div className="space-y-1.5 pt-3 border-t border-border/40">
+            <div className="space-y-1.5 pt-3 border-t border-border">
               <Label htmlFor="pseudonym" className="text-sm">Pseudonym (optional)</Label>
               <Input id="pseudonym" placeholder="Choose a display name" {...register("pseudonym")} />
               <p className="text-[10px] text-muted-foreground">Leave empty to use your account name</p>

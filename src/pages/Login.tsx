@@ -22,14 +22,9 @@ export default function Login() {
   const location = useLocation();
   const { signIn } = useAuth();
 
-  // Get the intended destination from state, default to home
   const from = (location.state as { from?: { pathname: string } })?.from?.pathname || "/";
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<LoginForm>({
+  const { register, handleSubmit, formState: { errors } } = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
   });
 
@@ -37,7 +32,6 @@ export default function Login() {
     setIsLoading(true);
     const { error } = await signIn(data.email, data.password);
     setIsLoading(false);
-    
     if (!error) {
       navigate(from, { replace: true });
     }
@@ -46,86 +40,44 @@ export default function Login() {
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Header */}
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-2 mb-6">
-            <div className="h-12 w-12 rounded-xl gradient-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-2xl">K</span>
+            <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center">
+              <span className="text-primary font-bold text-2xl">K</span>
             </div>
           </Link>
-          <h1 className="text-2xl md:text-3xl font-bold mb-2">Welcome back</h1>
-          <p className="text-muted-foreground">
-            Sign in to continue to KIIT IT
-          </p>
+          <h1 className="font-display text-2xl md:text-3xl font-bold mb-2">Welcome back</h1>
+          <p className="text-muted-foreground">Sign in to continue to KIIT IT</p>
         </div>
 
-        {/* Form */}
-        <div className="p-6 md:p-8 rounded-2xl glass border border-border/50">
+        <div className="p-6 md:p-8 rounded-card bg-card border border-border shadow-card">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-            {/* Email */}
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="you@example.com"
-                  className="pl-10"
-                  {...register("email")}
-                />
+                <Input id="email" type="email" placeholder="you@example.com" className="pl-10" {...register("email")} />
               </div>
-              {errors.email && (
-                <p className="text-sm text-destructive">{errors.email.message}</p>
-              )}
+              {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
             </div>
 
-            {/* Password */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <Label htmlFor="password">Password</Label>
-                <Link 
-                  to="/forgot-password" 
-                  className="text-sm text-primary hover:underline"
-                >
-                  Forgot password?
-                </Link>
+                <Link to="/forgot-password" className="text-sm text-primary hover:underline">Forgot password?</Link>
               </div>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="••••••••"
-                  className="pl-10"
-                  {...register("password")}
-                />
+                <Input id="password" type="password" placeholder="••••••••" className="pl-10" {...register("password")} />
               </div>
-              {errors.password && (
-                <p className="text-sm text-destructive">{errors.password.message}</p>
-              )}
+              {errors.password && <p className="text-sm text-destructive">{errors.password.message}</p>}
             </div>
 
-            {/* Submit Button */}
-            <Button 
-              type="submit" 
-              variant="gradient" 
-              size="lg" 
-              className="w-full gap-2"
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <Loader2 className="h-5 w-5 animate-spin" />
-              ) : (
-                <>
-                  Sign In
-                  <ArrowRight className="h-5 w-5" />
-                </>
-              )}
+            <Button type="submit" variant="gradient" size="lg" className="w-full gap-2" disabled={isLoading}>
+              {isLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : <>Sign In<ArrowRight className="h-5 w-5" /></>}
             </Button>
           </form>
 
-          {/* Divider */}
           <div className="relative my-6">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-border" />
@@ -135,15 +87,11 @@ export default function Login() {
             </div>
           </div>
 
-          {/* Sign Up Link */}
           <Link to="/signup">
-            <Button variant="outline" size="lg" className="w-full">
-              Create an account
-            </Button>
+            <Button variant="outline" size="lg" className="w-full">Create an account</Button>
           </Link>
         </div>
 
-        {/* Footer */}
         <p className="text-center text-sm text-muted-foreground mt-6">
           By signing in, you agree to our{" "}
           <Link to="/terms" className="text-primary hover:underline">Terms of Service</Link>
