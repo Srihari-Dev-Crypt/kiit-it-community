@@ -48,15 +48,15 @@ export default function Questions() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
         <ScrollReveal direction="left" blur>
           <div className="flex items-center gap-2.5 mb-1">
-            <HelpCircle className="h-5 w-5 text-accent" />
-            <h1 className="text-2xl font-bold">Student Q&A</h1>
+            <HelpCircle className="h-5 w-5 text-primary" />
+            <h1 className="font-display text-2xl font-bold">Student Q&A</h1>
           </div>
           <p className="text-muted-foreground text-sm">Ask questions, get answers from fellow students</p>
         </ScrollReveal>
         {user && (
           <ScrollReveal direction="right" blur delay={0.1}>
             <Link to="/create?type=question">
-              <Button variant="gradient" size="sm" className="gap-2 rounded-full shadow-md shadow-primary/20">
+              <Button variant="gradient" size="sm" className="gap-2 rounded-full">
                 <PenSquare className="h-3.5 w-3.5" />
                 Ask a Question
               </Button>
@@ -88,7 +88,7 @@ export default function Questions() {
       <div className="space-y-3">
         {isLoading ? (
           Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="p-5 rounded-xl bg-card/50 border border-border/40 animate-pulse">
+            <div key={i} className="p-5 rounded-card bg-card border border-border animate-pulse">
               <div className="flex gap-4">
                 <div className="flex flex-col items-center gap-2">
                   <Skeleton className="h-8 w-8 rounded" />
@@ -121,8 +121,7 @@ export default function Questions() {
               {user ? (
                 <Link to="/create?type=question">
                   <Button variant="gradient" className="gap-2 rounded-full">
-                    <PenSquare className="h-4 w-4" />
-                    Ask a Question
+                    <PenSquare className="h-4 w-4" />Ask a Question
                   </Button>
                 </Link>
               ) : (

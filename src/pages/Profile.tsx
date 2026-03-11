@@ -83,17 +83,17 @@ export default function Profile() {
   return (
     <div className="container mx-auto px-4 py-8 max-w-2xl">
       <div className="flex items-center gap-4 mb-8">
-        <div className="h-14 w-14 rounded-full gradient-primary flex items-center justify-center">
-          <User className="h-6 w-6 text-primary-foreground" />
+        <div className="h-14 w-14 rounded-full bg-primary/10 flex items-center justify-center">
+          <User className="h-6 w-6 text-primary" />
         </div>
         <div>
-          <h1 className="text-xl font-bold">{profile?.display_name || 'Anonymous User'}</h1>
+          <h1 className="font-display text-xl font-bold">{profile?.display_name || 'Anonymous User'}</h1>
           <p className="text-muted-foreground text-xs">{user.email}</p>
         </div>
       </div>
 
       <Tabs defaultValue="profile" className="space-y-5">
-        <TabsList className="w-full bg-muted/40 rounded-full p-1">
+        <TabsList className="w-full bg-secondary rounded-full p-1">
           <TabsTrigger value="profile" className="flex-1 gap-1.5 rounded-full text-xs"><User className="h-3.5 w-3.5" />Profile</TabsTrigger>
           <TabsTrigger value="privacy" className="flex-1 gap-1.5 rounded-full text-xs"><Shield className="h-3.5 w-3.5" />Privacy</TabsTrigger>
           <TabsTrigger value="settings" className="flex-1 gap-1.5 rounded-full text-xs"><Settings className="h-3.5 w-3.5" />Settings</TabsTrigger>
@@ -104,7 +104,7 @@ export default function Profile() {
             <div className="space-y-4"><Skeleton className="h-10 w-full" /><Skeleton className="h-24 w-full" /></div>
           ) : (
             <form onSubmit={handleSubmit((data) => updateProfile.mutate(data))} className="space-y-5">
-              <div className="p-5 rounded-xl bg-card/50 border border-border/40 space-y-4">
+              <div className="p-5 rounded-card bg-card border border-border space-y-4">
                 <div className="space-y-1.5">
                   <Label htmlFor="display_name" className="text-sm">Display Name</Label>
                   <Input id="display_name" placeholder="How should we call you?" {...register("display_name")} />
@@ -124,7 +124,7 @@ export default function Profile() {
         </TabsContent>
 
         <TabsContent value="privacy">
-          <div className="p-5 rounded-xl bg-card/50 border border-border/40 space-y-5">
+          <div className="p-5 rounded-card bg-card border border-border space-y-5">
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-sm font-medium">Default to Anonymous</div>
@@ -132,7 +132,7 @@ export default function Profile() {
               </div>
               <Switch checked={isAnonymousDefault} onCheckedChange={(v) => setValue('is_anonymous_default', v, { shouldDirty: true })} />
             </div>
-            <div className="pt-4 border-t border-border/40">
+            <div className="pt-4 border-t border-border">
               <h3 className="text-sm font-medium mb-1.5">Privacy Information</h3>
               <p className="text-xs text-muted-foreground leading-relaxed">
                 Your identity is protected on all anonymous posts. Only you can see which posts belong to you. Moderators cannot see your identity on anonymous posts.
@@ -146,7 +146,7 @@ export default function Profile() {
 
         <TabsContent value="settings">
           <div className="space-y-4">
-            <div className="p-5 rounded-xl bg-card/50 border border-border/40">
+            <div className="p-5 rounded-card bg-card border border-border">
               <h3 className="text-sm font-medium mb-3">Account</h3>
               <div className="space-y-2 text-xs">
                 <div className="flex justify-between"><span className="text-muted-foreground">Email</span><span>{user.email}</span></div>

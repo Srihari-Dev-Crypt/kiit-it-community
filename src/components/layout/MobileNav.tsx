@@ -16,7 +16,7 @@ export function MobileNav() {
   const { user } = useAuth();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden border-t border-border/50 bg-background/95 backdrop-blur-xl safe-area-bottom">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden border-t border-border bg-card/95 backdrop-blur-md safe-area-bottom">
       <div className="flex items-center justify-around h-16 px-2">
         {navItems.map((item) => {
           const isActive = location.pathname === item.path;
@@ -24,7 +24,7 @@ export function MobileNav() {
           if (item.isAction) {
             return (
               <Link key={item.path} to={user ? item.path : "/login"} className="flex flex-col items-center -mt-4">
-                <div className="h-12 w-12 rounded-full gradient-primary flex items-center justify-center shadow-lg shadow-primary/30">
+                <div className="h-12 w-12 rounded-full gradient-primary flex items-center justify-center shadow-md">
                   <item.icon className="h-5 w-5 text-primary-foreground" />
                 </div>
               </Link>

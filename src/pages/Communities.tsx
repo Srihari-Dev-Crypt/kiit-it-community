@@ -24,7 +24,7 @@ export default function Communities() {
       <ScrollReveal direction="down" blur className="mb-8">
         <div className="flex items-center gap-2.5 mb-1">
           <Users className="h-5 w-5 text-primary" />
-          <h1 className="text-2xl font-bold">Communities</h1>
+          <h1 className="font-display text-2xl font-bold">Communities</h1>
         </div>
         <p className="text-muted-foreground text-sm">Join topic-based communities and connect with like-minded students</p>
       </ScrollReveal>
@@ -32,7 +32,7 @@ export default function Communities() {
       {isLoading ? (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="p-5 rounded-xl bg-card/50 border border-border/40 animate-pulse">
+            <div key={i} className="p-5 rounded-card bg-card border border-border animate-pulse">
               <Skeleton className="h-10 w-10 rounded-lg mb-4" />
               <Skeleton className="h-5 w-28 mb-2" />
               <Skeleton className="h-3 w-full mb-4" />
@@ -44,9 +44,9 @@ export default function Communities() {
         <StaggerContainer className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4" staggerDelay={0.08}>
           {communities.map((community) => (
             <StaggerItem key={community.id} blur>
-              <div className="group p-5 rounded-xl bg-card/50 border border-border/40 hover:border-primary/25 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/5 h-full flex flex-col">
+              <div className="group p-5 rounded-card bg-card border border-border shadow-card hover:shadow-card-hover transition-all duration-normal hover:-translate-y-1 h-full flex flex-col">
                 <div className="flex items-start justify-between mb-3">
-                  <div className="h-10 w-10 rounded-lg gradient-primary flex items-center justify-center text-xl group-hover:scale-105 transition-transform">
+                  <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center text-xl group-hover:bg-primary/15 transition-colors">
                     {community.icon || '💬'}
                   </div>
                   <div className="flex items-center gap-1 text-xs text-muted-foreground">

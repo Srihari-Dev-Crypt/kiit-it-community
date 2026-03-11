@@ -64,7 +64,7 @@ export default function Notifications() {
     <div className="container mx-auto px-4 py-8 max-w-2xl">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-xl font-bold mb-0.5">Notifications</h1>
+          <h1 className="font-display text-xl font-bold mb-0.5">Notifications</h1>
           <p className="text-muted-foreground text-xs">{unreadCount > 0 ? `${unreadCount} unread` : 'All caught up!'}</p>
         </div>
         {unreadCount > 0 && (
@@ -77,7 +77,7 @@ export default function Notifications() {
       <div className="space-y-1.5">
         {isLoading ? (
           Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="p-4 rounded-lg bg-card/50 border border-border/40">
+            <div key={i} className="p-4 rounded-card bg-card border border-border">
               <div className="flex gap-3">
                 <Skeleton className="h-9 w-9 rounded-full" />
                 <div className="flex-1 space-y-2"><Skeleton className="h-3.5 w-3/4" /><Skeleton className="h-2.5 w-20" /></div>
@@ -91,9 +91,9 @@ export default function Notifications() {
               <div
                 key={n.id}
                 className={cn(
-                  "p-3.5 rounded-lg border transition-all cursor-pointer",
+                  "p-3.5 rounded-card border transition-all cursor-pointer",
                   n.is_read
-                    ? "bg-card/30 border-border/30 hover:border-border/50"
+                    ? "bg-card border-border hover:border-muted-foreground/20"
                     : "bg-primary/5 border-primary/20 hover:border-primary/30"
                 )}
                 onClick={() => { if (!n.is_read) markAsRead.mutate(n.id); }}
@@ -101,9 +101,9 @@ export default function Notifications() {
                 <div className="flex gap-3">
                   <div className={cn(
                     "h-9 w-9 rounded-full flex items-center justify-center flex-shrink-0",
-                    n.is_read ? "bg-muted" : "gradient-primary"
+                    n.is_read ? "bg-secondary" : "bg-primary/10"
                   )}>
-                    <Icon className={cn("h-4 w-4", n.is_read ? "text-muted-foreground" : "text-primary-foreground")} />
+                    <Icon className={cn("h-4 w-4", n.is_read ? "text-muted-foreground" : "text-primary")} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className={cn("text-sm", !n.is_read && "font-medium")}>{n.title}</p>

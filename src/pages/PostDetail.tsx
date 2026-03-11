@@ -30,11 +30,11 @@ const commentSchema = z.object({
 type CommentForm = z.infer<typeof commentSchema>;
 
 const postTypeConfig = {
-  confession: { icon: EyeOff, label: "Confession", color: "bg-primary/15 text-primary" },
-  question: { icon: HelpCircle, label: "Question", color: "bg-accent/15 text-accent" },
-  rant: { icon: Megaphone, label: "Rant", color: "bg-destructive/15 text-destructive" },
-  advice: { icon: Lightbulb, label: "Advice", color: "bg-warning/15 text-warning" },
-  discussion: { icon: MessageSquare, label: "Discussion", color: "bg-muted text-muted-foreground" },
+  confession: { icon: EyeOff, label: "Confession", color: "bg-primary/10 text-foreground" },
+  question: { icon: HelpCircle, label: "Question", color: "bg-blue-50 text-blue-700" },
+  rant: { icon: Megaphone, label: "Rant", color: "bg-red-50 text-red-700" },
+  advice: { icon: Lightbulb, label: "Advice", color: "bg-amber-50 text-amber-700" },
+  discussion: { icon: MessageSquare, label: "Discussion", color: "bg-secondary text-muted-foreground" },
 };
 
 export default function PostDetail() {
@@ -127,14 +127,14 @@ export default function PostDetail() {
       </Link>
 
       {/* Post */}
-      <article className="p-5 rounded-xl bg-card/60 backdrop-blur-sm border border-border/40 mb-6">
+      <article className="p-5 rounded-card bg-card border border-border shadow-card mb-6">
         <div className="flex gap-4">
           <div className="flex flex-col items-center gap-0.5">
-            <Button variant="ghost" size="icon" className={cn("h-9 w-9 rounded-lg", vote === 1 && "text-primary bg-primary/15")} onClick={handleUpvote} disabled={isVoting}>
+            <Button variant="ghost" size="icon" className={cn("h-9 w-9 rounded-lg", vote === 1 && "text-primary bg-primary/10")} onClick={handleUpvote} disabled={isVoting}>
               {isVoting ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowUp className="h-5 w-5" />}
             </Button>
             <span className={cn("text-base font-bold tabular-nums", totalVotes > 0 && "text-primary", totalVotes < 0 && "text-destructive")}>{totalVotes}</span>
-            <Button variant="ghost" size="icon" className={cn("h-9 w-9 rounded-lg", vote === -1 && "text-destructive bg-destructive/15")} onClick={handleDownvote} disabled={isVoting}>
+            <Button variant="ghost" size="icon" className={cn("h-9 w-9 rounded-lg", vote === -1 && "text-destructive bg-destructive/10")} onClick={handleDownvote} disabled={isVoting}>
               <ArrowDown className="h-5 w-5" />
             </Button>
           </div>
@@ -153,10 +153,10 @@ export default function PostDetail() {
               <span className="text-muted-foreground">{formatDistanceToNow(new Date(post.created_at), { addSuffix: true })}</span>
             </div>
 
-            <h1 className="text-xl font-bold mb-4">{post.title}</h1>
+            <h1 className="font-display text-xl font-bold mb-4">{post.title}</h1>
             <p className="text-foreground whitespace-pre-wrap text-sm leading-relaxed mb-5">{post.content}</p>
 
-            <div className="flex items-center gap-3 pt-4 border-t border-border/30">
+            <div className="flex items-center gap-3 pt-4 border-t border-border">
               <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
                 <MessageCircle className="h-3.5 w-3.5" />{post.comment_count ?? 0} Comments
               </span>
@@ -168,7 +168,7 @@ export default function PostDetail() {
 
       {/* Comment Form */}
       {user ? (
-        <div className="p-5 rounded-xl bg-card/50 border border-border/40 mb-6">
+        <div className="p-5 rounded-card bg-card border border-border mb-6">
           <h3 className="font-semibold text-sm mb-3">Add a Comment</h3>
           <form onSubmit={handleSubmit((data) => createComment.mutate(data))} className="space-y-3">
             <Textarea placeholder="Share your thoughts..." className="min-h-[80px] resize-none" {...register("content")} />
@@ -189,7 +189,7 @@ export default function PostDetail() {
           </form>
         </div>
       ) : (
-        <div className="p-5 rounded-xl bg-card/50 border border-border/40 mb-6 text-center">
+        <div className="p-5 rounded-card bg-card border border-border mb-6 text-center">
           <p className="text-muted-foreground text-sm mb-3">Sign in to comment</p>
           <Link to="/login"><Button variant="gradient" size="sm" className="rounded-full">Sign In</Button></Link>
         </div>
@@ -203,7 +203,7 @@ export default function PostDetail() {
         ) : comments && comments.length > 0 ? (
           comments.map((comment) => <CommentCard key={comment.id} comment={comment} postId={id!} />)
         ) : (
-          <div className="p-8 rounded-xl bg-card/50 border border-border/40 text-center">
+          <div className="p-8 rounded-card bg-card border border-border text-center">
             <MessageCircle className="h-10 w-10 mx-auto text-muted-foreground mb-3" />
             <p className="text-muted-foreground text-sm">No comments yet. Be the first!</p>
           </div>
