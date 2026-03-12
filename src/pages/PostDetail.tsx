@@ -43,6 +43,7 @@ export default function PostDetail() {
   const { user } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  useRealtimeComments(id);
 
   const { register, handleSubmit, reset, watch, setValue, formState: { errors } } = useForm<CommentForm>({
     resolver: zodResolver(commentSchema),
