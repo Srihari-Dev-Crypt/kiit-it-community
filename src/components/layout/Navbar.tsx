@@ -22,6 +22,7 @@ export function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
+  const unreadCount = useUnreadCount();
 
   const handleSignOut = async () => {
     await signOut();
