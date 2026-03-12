@@ -8,6 +8,7 @@ import logoImage from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
+import { useUnreadCount } from "@/hooks/useUnreadCount";
 
 const navItems = [
   { path: "/", icon: Home, label: "Home" },
