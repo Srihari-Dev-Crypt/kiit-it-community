@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { useVote } from "@/hooks/useVote";
+import { useRealtimeComments } from "@/hooks/useRealtimeComments";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
@@ -42,6 +43,7 @@ export default function PostDetail() {
   const { user } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  useRealtimeComments(id);
 
   const { register, handleSubmit, reset, watch, setValue, formState: { errors } } = useForm<CommentForm>({
     resolver: zodResolver(commentSchema),
