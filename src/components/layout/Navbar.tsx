@@ -75,7 +75,11 @@ export function Navbar() {
                 <Link to="/notifications">
                   <Button variant="ghost" size="icon" className="relative rounded-full h-9 w-9">
                     <Bell className="h-4 w-4" />
-                    <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-primary pulse-dot" />
+                    {unreadCount > 0 && (
+                      <span className="absolute -top-0.5 -right-0.5 h-4 min-w-4 px-1 rounded-full bg-primary text-primary-foreground text-[10px] font-bold flex items-center justify-center animate-in zoom-in-50">
+                        {unreadCount > 9 ? "9+" : unreadCount}
+                      </span>
+                    )}
                   </Button>
                 </Link>
                 <Link to="/ai-chat">
