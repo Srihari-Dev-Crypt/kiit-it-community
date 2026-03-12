@@ -131,23 +131,24 @@ export function useVote({ postId, commentId, initialUpvotes, initialDownvotes }:
           if (error) throw error;
         }
 
-        // Update post/comment vote counts
+        // Update post/comment vote counts via security definer functions
         if (postId) {
           let newUpvotes = optimisticUpvotes;
           let newDownvotes = optimisticDownvotes;
-
-          // Remove old vote effect
           if (currentVote === 1) newUpvotes--;
           if (currentVote === -1) newDownvotes--;
-
-          // Add new vote effect
           if (newVote === 1) newUpvotes++;
           if (newVote === -1) newDownvotes++;
-
-          await supabase
-            .from("posts")
-            .update({ upvotes: newUpvotes, downvotes: newDownvotes })
-            .eq("id", postId);
+          await supabase.rpc("update_post_votes", { _post_id: postId, _upvotes: newUpvotes, _downvotes: newDownvotes });
+        }
+        if (commentId) {
+          let newUpvotes = optimisticUpvotes;
+          let newDownvotes = optimisticDownvotes;
+          if (currentVote === 1) newUpvotes--;
+          if (currentVote === -1) newDownvotes--;
+          if (newVote === 1) newUpvotes++;
+          if (newVote === -1) newDownvotes++;
+          await supabase.rpc("update_comment_votes", { _comment_id: commentId, _upvotes: newUpvotes, _downvotes: newDownvotes });
         }
       }
 

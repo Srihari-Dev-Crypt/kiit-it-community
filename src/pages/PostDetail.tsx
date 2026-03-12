@@ -83,7 +83,7 @@ export default function PostDetail() {
         identity_type: data.is_anonymous ? "anonymous" : "named",
       });
       if (error) throw error;
-      await supabase.from("posts").update({ comment_count: (post?.comment_count ?? 0) + 1 }).eq("id", id);
+      await supabase.rpc("increment_comment_count", { _post_id: id });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["comments", id] });
