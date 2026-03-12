@@ -81,15 +81,20 @@ export function useVote({ postId, commentId, initialUpvotes, initialDownvotes }:
         const { error } = await query;
         if (error) throw error;
 
-        // Update post/comment vote counts
+        // Update post/comment vote counts via security definer functions
         if (postId) {
-          const updates: Record<string, number> = {};
-          if (currentVote === 1) updates.upvotes = optimisticUpvotes - 1;
-          if (currentVote === -1) updates.downvotes = optimisticDownvotes - 1;
-          
-          if (Object.keys(updates).length > 0) {
-            await supabase.from("posts").update(updates).eq("id", postId);
-          }
+          let newUp = optimisticUpvotes;
+          let newDown = optimisticDownvotes;
+          if (currentVote === 1) newUp--;
+          if (currentVote === -1) newDown--;
+          await supabase.rpc("update_post_votes", { _post_id: postId, _upvotes: newUp, _downvotes: newDown });
+        }
+        if (commentId) {
+          let newUp = optimisticUpvotes;
+          let newDown = optimisticDownvotes;
+          if (currentVote === 1) newUp--;
+          if (currentVote === -1) newDown--;
+          await supabase.rpc("update_comment_votes", { _comment_id: commentId, _upvotes: newUp, _downvotes: newDown });
         }
       } else {
         // Check if vote exists
