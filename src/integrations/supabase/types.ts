@@ -527,6 +527,18 @@ export type Database = {
         }
         Returns: boolean
       }
+      increment_comment_count: {
+        Args: { _post_id: string }
+        Returns: undefined
+      }
+      update_comment_votes: {
+        Args: { _comment_id: string; _downvotes: number; _upvotes: number }
+        Returns: undefined
+      }
+      update_post_votes: {
+        Args: { _downvotes: number; _post_id: string; _upvotes: number }
+        Returns: undefined
+      }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
