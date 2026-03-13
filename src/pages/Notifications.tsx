@@ -4,9 +4,21 @@ import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatDistanceToNow } from "date-fns";
-import { Bell, MessageCircle, ThumbsUp, CheckCheck, ArrowRight } from "lucide-react";
+import { Bell, MessageCircle, ThumbsUp, CheckCheck, ArrowRight, Trash2, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export default function Notifications() {
   const { user } = useAuth();
@@ -46,6 +58,31 @@ export default function Notifications() {
     },
   });
 
+  const deleteNotification = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("notifications").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["notifications"] });
+      queryClient.invalidateQueries({ queryKey: ["unread-count"] });
+      toast.success("Notification deleted");
+    },
+  });
+
+  const clearAll = useMutation({
+    mutationFn: async () => {
+      if (!user) return;
+      const { error } = await supabase.from("notifications").delete().eq("user_id", user.id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["notifications"] });
+      queryClient.invalidateQueries({ queryKey: ["unread-count"] });
+      toast.success("All notifications cleared");
+    },
+  });
+
   const getIcon = (type: string) => {
     switch (type) {
       case 'comment': return MessageCircle;
@@ -73,11 +110,32 @@ export default function Notifications() {
           <h1 className="font-display text-xl font-bold mb-0.5">Notifications</h1>
           <p className="text-muted-foreground text-xs">{unreadCount > 0 ? `${unreadCount} unread` : 'All caught up!'}</p>
         </div>
-        {unreadCount > 0 && (
-          <Button variant="outline" size="sm" onClick={() => markAllAsRead.mutate()} disabled={markAllAsRead.isPending} className="rounded-full text-xs h-8">
-            <CheckCheck className="h-3.5 w-3.5 mr-1.5" />Mark all read
-          </Button>
-        )}
+        <div className="flex gap-2">
+          {unreadCount > 0 && (
+            <Button variant="outline" size="sm" onClick={() => markAllAsRead.mutate()} disabled={markAllAsRead.isPending} className="rounded-full text-xs h-8">
+              <CheckCheck className="h-3.5 w-3.5 mr-1.5" />Mark all read
+            </Button>
+          )}
+          {notifications && notifications.length > 0 && (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="outline" size="sm" className="rounded-full text-xs h-8 text-destructive hover:text-destructive">
+                  <Trash2 className="h-3.5 w-3.5 mr-1.5" />Clear all
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Clear all notifications?</AlertDialogTitle>
+                  <AlertDialogDescription>This will permanently delete all your notifications. This action cannot be undone.</AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={() => clearAll.mutate()} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">Clear all</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          )}
+        </div>
       </div>
 
       <div className="space-y-1.5">
@@ -97,30 +155,42 @@ export default function Notifications() {
               <div
                 key={n.id}
                 className={cn(
-                  "p-3.5 rounded-card border transition-all cursor-pointer",
+                  "p-3.5 rounded-card border transition-all group relative",
                   n.is_read
                     ? "bg-card border-border hover:border-muted-foreground/20"
                     : "bg-primary/5 border-primary/20 hover:border-primary/30"
                 )}
-                onClick={() => { if (!n.is_read) markAsRead.mutate(n.id); }}
               >
                 <div className="flex gap-3">
-                  <div className={cn(
-                    "h-9 w-9 rounded-full flex items-center justify-center flex-shrink-0",
-                    n.is_read ? "bg-secondary" : "bg-primary/10"
-                  )}>
+                  <div
+                    className={cn(
+                      "h-9 w-9 rounded-full flex items-center justify-center flex-shrink-0 cursor-pointer",
+                      n.is_read ? "bg-secondary" : "bg-primary/10"
+                    )}
+                    onClick={() => { if (!n.is_read) markAsRead.mutate(n.id); }}
+                  >
                     <Icon className={cn("h-4 w-4", n.is_read ? "text-muted-foreground" : "text-primary")} />
                   </div>
-                  <div className="flex-1 min-w-0">
+                  <div className="flex-1 min-w-0 cursor-pointer" onClick={() => { if (!n.is_read) markAsRead.mutate(n.id); }}>
                     <p className={cn("text-sm", !n.is_read && "font-medium")}>{n.title}</p>
                     {n.message && <p className="text-xs text-muted-foreground line-clamp-1">{n.message}</p>}
                     <p className="text-[10px] text-muted-foreground mt-0.5">{formatDistanceToNow(new Date(n.created_at), { addSuffix: true })}</p>
                   </div>
-                  {n.related_post_id && (
-                    <Link to={`/post/${n.related_post_id}`}>
-                      <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full"><ArrowRight className="h-3.5 w-3.5" /></Button>
-                    </Link>
-                  )}
+                  <div className="flex items-center gap-1">
+                    {n.related_post_id && (
+                      <Link to={`/post/${n.related_post_id}`}>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full"><ArrowRight className="h-3.5 w-3.5" /></Button>
+                      </Link>
+                    )}
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 rounded-full opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-destructive"
+                      onClick={(e) => { e.stopPropagation(); deleteNotification.mutate(n.id); }}
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </Button>
+                  </div>
                 </div>
               </div>
             );
