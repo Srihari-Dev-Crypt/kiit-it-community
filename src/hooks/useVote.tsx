@@ -40,7 +40,7 @@ export function useVote({ postId, commentId, initialUpvotes, initialDownvotes }:
       
       const { data, error } = await query.maybeSingle();
       if (error) throw error;
-      return data?.vote_type as VoteType | null;
+      return (data?.vote_type as VoteType) ?? null;
     },
     enabled: !!user,
   });
