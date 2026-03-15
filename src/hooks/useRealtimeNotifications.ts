@@ -31,7 +31,12 @@ export function useRealtimeNotifications() {
           queryClient.invalidateQueries({ queryKey: ["unread-count", user.id] });
           const n = payload.new;
           if (n?.title) {
-            toast(n.title, { description: n.message || undefined });
+            toast(n.title, {
+              description: n.message || undefined,
+              action: n.related_post_id
+                ? { label: "View", onClick: () => navigate(`/post/${n.related_post_id}`) }
+                : undefined,
+            });
           }
         }
       )
