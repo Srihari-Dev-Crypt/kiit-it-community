@@ -9,6 +9,7 @@ import { toast } from "sonner";
  * Automatically invalidates the notifications query cache on new notifications.
  */
 export function useRealtimeNotifications() {
+  const navigate = useNavigate();
   const { user } = useAuth();
   const queryClient = useQueryClient();
 
