@@ -22,7 +22,7 @@ export function useRealtimePosts() {
         () => {
           queryClient.invalidateQueries({ queryKey: ["recent-posts"] });
           queryClient.invalidateQueries({ queryKey: ["posts"] });
-          queryClient.invalidateQueries({ queryKey: ["confessions"] });
+          queryClient.invalidateQueries({ queryKey: ["confessions"], exact: false });
           queryClient.invalidateQueries({ queryKey: ["questions"] });
         }
       )
