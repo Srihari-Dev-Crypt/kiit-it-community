@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-
+import { toast } from "sonner";
 /**
  * Subscribes to real-time notification inserts for the current user.
  * Automatically invalidates the notifications query cache on new notifications.
@@ -24,9 +24,13 @@ export function useRealtimeNotifications() {
           table: "notifications",
           filter: `user_id=eq.${user.id}`,
         },
-        () => {
+        (payload: any) => {
           queryClient.invalidateQueries({ queryKey: ["notifications", user.id] });
           queryClient.invalidateQueries({ queryKey: ["unread-count", user.id] });
+          const n = payload.new;
+          if (n?.title) {
+            toast(n.title, { description: n.message || undefined });
+          }
         }
       )
       .on(
