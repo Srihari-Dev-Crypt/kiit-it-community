@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
@@ -8,6 +9,7 @@ import { toast } from "sonner";
  * Automatically invalidates the notifications query cache on new notifications.
  */
 export function useRealtimeNotifications() {
+  const navigate = useNavigate();
   const { user } = useAuth();
   const queryClient = useQueryClient();
 
@@ -29,7 +31,12 @@ export function useRealtimeNotifications() {
           queryClient.invalidateQueries({ queryKey: ["unread-count", user.id] });
           const n = payload.new;
           if (n?.title) {
-            toast(n.title, { description: n.message || undefined });
+            toast(n.title, {
+              description: n.message || undefined,
+              action: n.related_post_id
+                ? { label: "View", onClick: () => navigate(`/post/${n.related_post_id}`) }
+                : undefined,
+            });
           }
         }
       )
