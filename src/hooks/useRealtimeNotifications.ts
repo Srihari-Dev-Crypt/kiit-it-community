@@ -24,9 +24,13 @@ export function useRealtimeNotifications() {
           table: "notifications",
           filter: `user_id=eq.${user.id}`,
         },
-        () => {
+        (payload: any) => {
           queryClient.invalidateQueries({ queryKey: ["notifications", user.id] });
           queryClient.invalidateQueries({ queryKey: ["unread-count", user.id] });
+          const n = payload.new;
+          if (n?.title) {
+            toast(n.title, { description: n.message || undefined });
+          }
         }
       )
       .on(
