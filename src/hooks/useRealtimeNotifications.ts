@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-
+import { toast } from "sonner";
 /**
  * Subscribes to real-time notification inserts for the current user.
  * Automatically invalidates the notifications query cache on new notifications.
