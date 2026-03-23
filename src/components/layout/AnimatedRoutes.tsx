@@ -15,6 +15,7 @@ import PostDetail from "@/pages/PostDetail";
 import MyPosts from "@/pages/MyPosts";
 import AIChatbot from "@/pages/AIChatbot";
 import NotFound from "@/pages/NotFound";
+import CommunityDetail from "@/pages/CommunityDetail";
 
 export function AnimatedRoutes() {
   const location = useLocation();
@@ -34,6 +35,7 @@ export function AnimatedRoutes() {
         <Route path="/post/:id" element={<PageTransition><ProtectedRoute><PostDetail /></ProtectedRoute></PageTransition>} />
         <Route path="/my-posts" element={<PageTransition><ProtectedRoute><MyPosts /></ProtectedRoute></PageTransition>} />
         <Route path="/ai-chat" element={<PageTransition><ProtectedRoute><AIChatbot /></ProtectedRoute></PageTransition>} />
+        <Route path="/community/:id" element={<PageTransition><ProtectedRoute><CommunityDetail /></ProtectedRoute></PageTransition>} />
         <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
       </Routes>
     </AnimatePresence>

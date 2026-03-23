@@ -64,7 +64,7 @@ export default function Login() {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <Label htmlFor="password">Password</Label>
-                <Link to="/forgot-password" className="text-sm text-primary hover:underline">Forgot password?</Link>
+                <span className="text-sm text-muted-foreground cursor-not-allowed">Forgot password?</span>
               </div>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
@@ -93,10 +93,7 @@ export default function Login() {
         </div>
 
         <p className="text-center text-sm text-muted-foreground mt-6">
-          By signing in, you agree to our{" "}
-          <Link to="/terms" className="text-primary hover:underline">Terms of Service</Link>
-          {" "}and{" "}
-          <Link to="/privacy" className="text-primary hover:underline">Privacy Policy</Link>
+          By signing in, you agree to our Terms of Service and Privacy Policy.
         </p>
       </div>
     </div>
