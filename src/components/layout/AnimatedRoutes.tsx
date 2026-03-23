@@ -15,6 +15,7 @@ import PostDetail from "@/pages/PostDetail";
 import MyPosts from "@/pages/MyPosts";
 import AIChatbot from "@/pages/AIChatbot";
 import NotFound from "@/pages/NotFound";
+import CommunityDetail from "@/pages/CommunityDetail";
 
 export function AnimatedRoutes() {
   const location = useLocation();
