@@ -35,6 +35,7 @@ export function AnimatedRoutes() {
         <Route path="/post/:id" element={<PageTransition><ProtectedRoute><PostDetail /></ProtectedRoute></PageTransition>} />
         <Route path="/my-posts" element={<PageTransition><ProtectedRoute><MyPosts /></ProtectedRoute></PageTransition>} />
         <Route path="/ai-chat" element={<PageTransition><ProtectedRoute><AIChatbot /></ProtectedRoute></PageTransition>} />
+        <Route path="/community/:id" element={<PageTransition><ProtectedRoute><CommunityDetail /></ProtectedRoute></PageTransition>} />
         <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
       </Routes>
     </AnimatePresence>
