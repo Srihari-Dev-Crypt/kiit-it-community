@@ -1,73 +1,170 @@
-# Welcome to your Lovable project
+# KIIT IT — Anonymous Student Community Platform
 
-## Project info
+> An anonymous-first student community where users can express themselves freely, get answers, and connect with peers — without fear of judgment.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+---
 
-## How can I edit this code?
+## Tech Stack
 
-There are several ways of editing your application.
+### Frontend
+| Technology | Purpose |
+|---|---|
+| **React 18 + TypeScript** | UI framework |
+| **Vite** | Build tool & dev server |
+| **Tailwind CSS + shadcn/ui** | Styling & accessible components |
+| **React Router v6** | Client-side routing |
+| **TanStack React Query** | Data fetching, caching, server state |
+| **React Hook Form + Zod** | Form handling & validation |
+| **Lucide React** | Icons |
+| **date-fns** | Date formatting |
+| **Sonner** | Toast notifications |
 
-**Use Lovable**
+### Backend (Supabase)
+| Technology | Purpose |
+|---|---|
+| **PostgreSQL** | Relational database |
+| **Supabase Auth** | Email/password authentication |
+| **Supabase Realtime** | WebSocket subscriptions for live updates |
+| **Row Level Security (RLS)** | Database-level access control |
+| **SQL Views** | Anonymity layer (`posts_public`) |
+| **RPC Functions** | Server-side vote/comment counting |
+| **Database Triggers** | Auto-create profile on signup |
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+---
 
-Changes made via Lovable will be committed automatically to this repo.
+## Pages (12 Routes)
 
-**Use your preferred IDE**
+| Route | Component | Auth | Description |
+|---|---|---|---|
+| `/` | `Index` | No | Landing — hero, features, recent posts, stats, CTA |
+| `/login` | `Login` | No | Email/password login |
+| `/signup` | `Signup` | No | Registration with password strength indicator |
+| `/confessions` | `Confessions` | Yes | Confession feed (sort: New/Hot/Top) |
+| `/questions` | `Questions` | Yes | Q&A feed (sort: Newest/Unanswered/Top) |
+| `/communities` | `Communities` | Yes | Community grid |
+| `/community/:id` | `CommunityDetail` | Yes | Community posts & rules |
+| `/create` | `CreatePost` | Yes | Post creation with type/community/anonymity selector |
+| `/post/:id` | `PostDetail` | Yes | Full post with voting, comments |
+| `/notifications` | `Notifications` | Yes | Notification inbox |
+| `/profile` | `Profile` | Yes | Profile/Privacy/Settings tabs |
+| `/my-posts` | `MyPosts` | Yes | User's own posts with type filters |
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+---
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## Components
 
-Follow these steps:
+### Layout
+- **`Layout`** — Wraps pages with Navbar + MobileNav, initializes realtime hooks
+- **`Navbar`** — Top bar with KIIT IT logo, nav pills, auth buttons, notification badge
+- **`MobileNav`** — Fixed bottom nav with floating "Post" action button
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### Feature Components
+- **`PostCard`** — Post with voting, type badge, identity display, comment count, share
+- **`ShareMenu`** — Copy Link / Twitter / Facebook / Email sharing
+- **`CommentCard`** — Comment with voting, identity, "Best Answer" badge
+- **`ProtectedRoute`** — Redirects unauthenticated users to `/login`
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### Custom Hooks
+- **`useAuth`** — Auth context (signUp, signIn, signOut, user/session)
+- **`useVote`** — Optimistic voting for posts & comments
+- **`useUnreadCount`** — Polls unread notifications every 30s
+- **`useRealtimePosts`** — Subscribes to post changes
+- **`useRealtimeComments`** — Subscribes to comment changes per post
+- **`useRealtimeNotifications`** — Live notification alerts via toast
 
-# Step 3: Install the necessary dependencies.
-npm i
+---
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+## Database Schema
+
+### Tables
+
+**`profiles`** — `user_id`, `display_name`, `bio`, `avatar_url`, `is_anonymous_default`
+
+**`communities`** — `name`, `description`, `icon`, `rules[]`, `member_count`
+
+**`posts`** — `user_id`, `title`, `content`, `post_type` (confession/question/rant/advice/discussion), `identity_type` (anonymous/pseudonymous/named), `pseudonym`, `community_id`, `upvotes`, `downvotes`, `comment_count`
+
+**`comments`** — `post_id`, `user_id`, `parent_id`, `content`, `identity_type`, `pseudonym`, `upvotes`, `downvotes`, `is_best_answer`
+
+**`votes`** — `user_id`, `post_id`, `comment_id`, `vote_type` (1 or -1). Unique constraints: `(user_id, post_id)` and `(user_id, comment_id)`
+
+**`notifications`** — `user_id`, `type` (comment/upvote/mention/general), `title`, `message`, `related_post_id`, `is_read`
+
+---
+
+## Anonymity System — How It Works
+
+Anonymity is enforced at **three levels**:
+
+### 1. Database Column — `identity_type`
+Every post/comment stores: `anonymous`, `pseudonymous`, or `named`.
+
+### 2. SQL View — `posts_public` (Core Mechanism)
+The frontend **never queries `posts` directly** for public feeds. It uses:
+
+```sql
+CREATE VIEW posts_public AS
+SELECT
+  id,
+  CASE WHEN identity_type = 'anonymous' THEN NULL ELSE user_id END AS user_id,
+  title, content, post_type, identity_type, pseudonym,
+  community_id, upvotes, downvotes, comment_count,
+  created_at, updated_at
+FROM posts;
 ```
 
-**Edit a file directly in GitHub**
+When `identity_type = 'anonymous'`, the `user_id` is **replaced with NULL** at the database level. Even inspecting network requests reveals nothing. The real `user_id` remains in the `posts` table so users can manage their own posts via `/my-posts`.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### 3. Frontend Display
+`PostCard`/`CommentCard` show: 🔒 "Anonymous" (eye-off icon), 🎭 pseudonym, or 👤 "User" based on `identity_type`.
 
-**Use GitHub Codespaces**
+### 4. Per-Action Toggle
+Users choose anonymity on **every post and comment** independently via a Switch toggle.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+---
 
-## What technologies are used for this project?
+## SQL Components
 
-This project is built with:
+### RPC Functions (`SECURITY DEFINER`)
+| Function | Purpose |
+|---|---|
+| `update_post_votes(_post_id, _upvotes, _downvotes)` | Update post vote counts |
+| `update_comment_votes(_comment_id, _upvotes, _downvotes)` | Update comment vote counts |
+| `increment_comment_count(_post_id)` | Increment post's comment count |
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### Trigger
+`on_auth_user_created` → `handle_new_user()` — auto-creates a `profiles` row on signup.
 
-## How can I deploy this project?
+### RLS Policies
+- **profiles**: View all (authenticated), update own
+- **communities**: View all (authenticated)
+- **posts**: View all, create/update/delete own
+- **comments**: View all, create/update/delete own
+- **votes**: View/create/update/delete own only
+- **notifications**: View/update/delete own only
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+### Realtime
+`posts`, `comments`, and `notifications` tables are added to `supabase_realtime` publication.
 
-## Can I connect a custom domain to my Lovable project?
+### Seed Data
+8 communities: Campus Life, Academics, Tech & Coding, Placements, Mental Health, Sports, Memes & Fun, Lost & Found.
 
-Yes, you can!
+---
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## Project Structure
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+```
+src/
+├── assets/              # Logo
+├── components/
+│   ├── auth/            # ProtectedRoute
+│   ├── comments/        # CommentCard
+│   ├── layout/          # Layout, Navbar, MobileNav
+│   ├── posts/           # PostCard, ShareMenu
+│   └── ui/              # shadcn/ui components
+├── hooks/               # useAuth, useVote, useRealtime*, useUnreadCount
+├── integrations/supabase/  # Supabase client
+├── pages/               # 12 page components
+├── index.css            # Design system (HSL tokens, custom utilities)
+├── App.tsx              # Root with routing
+└── main.tsx             # Entry point
